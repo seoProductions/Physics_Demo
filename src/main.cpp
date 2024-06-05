@@ -2,6 +2,7 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include <string>
+#include <algorithm>
 
 ////////////////////////////////////////////////////////////
 int main()
@@ -17,6 +18,7 @@ int main()
 
     float mainView_angle = 0;
     float bricks_angle   = 0;
+    float mouse_scroll_val = 0;
 
     std::string log = "text here";
     sf::Clock clock;
@@ -49,12 +51,13 @@ int main()
     while (window.isOpen())
     {
 
-        ImGui::SFML::Update(window, clock.restart());
 
         //SFML VIEW LOGIC
         window.setView(mainView);
         mainView.setRotation(mainView_angle * 180 / PI);
         bricks_sprite.setRotation(bricks_angle * 180 / PI);
+
+        ImGui::SFML::Update(window, clock.restart());
 
         // SFML-IMGUI EVENTS
         for (auto event = sf::Event{}; window.pollEvent(event);)
@@ -70,22 +73,39 @@ int main()
             if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))  log = "middle click detected";
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right))   log = "right click detected";
 
-            //if (event.mouseWheel.delta != 0)
-            //{
-            //    (event.mouseWheel.delta > 0) ? log = "scroll up detected": log = "scroll down detected";
-            //}
-            /*if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+
+            //MOUSE SCROLLING
+            //https://github.com/SFML/SFML/wiki/Source:-Zoom-View-At-%28specified-pixel%29
+            float scroll_dt = (float)ImGui::GetIO().MouseWheel;
+            if (scroll_dt) // if != 0
+            {
+                mouse_scroll_val += scroll_dt;
+                mouse_scroll_val = std::clamp<float>(mouse_scroll_val, -10, 10);        // limit scrolling
+                (scroll_dt > 0) ? log = "scroll up detected": log = "scroll down detected";
+
+                auto prev_center = mainView.getCenter();
+                mainView.setCenter(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+
+                mainView.setSize(mainView.getSize().x + mouse_scroll_val,
+                                 mainView.getSize().y + mouse_scroll_val);
+
+                mainView.setCenter(prev_center);
+
+                //update view origin
+
+            }
+
+
+            if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
                 //Drag the main view
-                log = "left click dragged";
                 mainView.move(prev_mouse_pos.x - sf::Mouse::getPosition(window).x,
                               prev_mouse_pos.y - sf::Mouse::getPosition(window).y);
                 prev_mouse_pos = sf::Mouse::getPosition(window);
-            }*/
-
+            }
         }
 
 
-        ImGui::Begin("test window", NULL, ImGuiWindowFlags_AlwaysUseWindowPadding);
+        ImGui::Begin("test window", NULL, ImGuiWindowFlags_AlwaysAutoResize);
         if (ImGui::BeginMainMenuBar())
         {
             if (ImGui::Button("Kinematics")) { log = "Kinematics clicked"; }
@@ -97,6 +117,19 @@ int main()
 
             ImGui::EndMainMenuBar();
         }
+
+        // Output mouse pos relative to *window
+        ImGui::Text("Mouse x");
+        ImGui::Text(std::to_string(
+                sf::Mouse::getPosition(window).x).c_str());
+        ImGui::Text("Mouse y");
+        ImGui::Text(std::to_string(
+                sf::Mouse::getPosition(window).y).c_str());
+
+        ImGui::Text("Mouse Scroll Value");
+        ImGui::Text(std::to_string(mouse_scroll_val).c_str());
+        ImGui::Text("Mouse Scroll IO Value");
+        ImGui::Text(std::to_string(ImGui::GetIO().MouseWheel).c_str());
         ImGui::End();
 
 
@@ -148,4 +181,5 @@ int main()
     }
 
     ImGui::SFML::Shutdown();
+    return EXIT_SUCCESS;
 }
