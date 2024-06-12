@@ -50,9 +50,9 @@ int main()
     // DEFAULT
     WorldSpace current_world = WorldSpaceList[0];   //std::array return reference
 
-    //
-    //      TEMPORARY
-    //SFML
+    ////
+    ////      TEMPORARY
+    ////SFML
     sf::Texture bricks_texture;
 
     //SFML Sprite set up
@@ -90,10 +90,7 @@ int main()
             //MOUSE CLICKS
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))    log = "left click detected";
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right))   log = "right click detected";
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
-            {   log = "middle click detected";
-
-            }
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))  log = "middle click detected";
 
             // HANDLE DRAGGING
             DragHandler::updateDragging();
@@ -113,6 +110,14 @@ int main()
                 view.move(offsetCoords);
                 window.setView(view);
 
+            }
+
+            // Drag the view on Middle-Click Drag
+            if (DragHandler::isDragging() && !DragHandler::isSelecting())
+            {
+                // messy world view translation :o
+                current_world.m_worldview.move(-static_cast<sf::Vector2f>(window.mapCoordsToPixel(
+                        window.mapPixelToCoords(DragHandler::getDeltaPos()))));        // translate to pixel coords
             }
         }
 
@@ -225,7 +230,7 @@ int main()
         window.draw(current_world.m_shape);
 
         //RENDER DRAGGED RECTANGLE - on condition
-        if (DragHandler::isDragging())
+        if (DragHandler::isSelecting())
             window.draw(DragHandler::getDraggedRectangle());
 
         //RENDER IMGUI
