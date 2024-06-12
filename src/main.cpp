@@ -4,39 +4,30 @@
 #include <string>
 #include <algorithm>
 
+#include "WorldSpace.h"
+#include "DragHandler.h"
+
 ////////////////////////////////////////////////////////////
 int main()
 {
 
     auto window = sf::RenderWindow{ { 1920u, 1080u }, "Cmake with SFML with Dear IMGUI Demo!" };
     window.setFramerateLimit(144);
-    ImGui::SFML::Init(window);
+    if (!ImGui::SFML::Init(window)) return EXIT_FAILURE;
+
+    // DRAGHANDLER & EVENT
+    sf::Event event;
+    DragHandler::init(&window, &event);
+
 
     // good to have - variables
-    const double PI = 3.1415;
     bool dev_tools_active = true;
-
     float mainView_angle = 0;
+
+    // temporary variables
     float bricks_angle   = 0;
-    float mouse_scroll_val = 0;
 
-    std::string log = "text here";
-    sf::Clock clock;
-
-    //SFML
-    sf::Texture bricks_texture;
-    sf::Sprite  bricks_sprite;
-
-    //SFML Sprite set up
-    if (!bricks_texture.loadFromFile("/home/seo/CLionProjects/physics_plane_test/bricks.jpg")) return EXIT_FAILURE;
-    bricks_sprite.setTexture(bricks_texture);
-    bricks_texture.setRepeated(true);
-
-    bricks_sprite.setOrigin(bricks_texture.getSize().x / 2,
-                            bricks_texture.getSize().y / 2);
-    bricks_sprite.setPosition(window.getSize().x / 2,
-                              window.getSize().y / 2);
-    bricks_sprite.setRotation(0.f);
+    std::string log = "log text here!";
 
 
     //VIEWS
@@ -45,22 +36,50 @@ int main()
                                 mainView.getSize().y / 2);
 
     //VIEW TRANSFORM  (for dragging)
-    sf::Vector2i prev_mouse_pos (0,0);
+    sf::Vector2f prev_mouse_pos (0,0);
 
+    //INIT World Space List
+    std::array<WorldSpace, 3> WorldSpaceList =
+            {
+                WorldSpace("Kinematics"),
+                WorldSpace("Dynamics"),
+                WorldSpace("Rotation"),
+                // more comming soon
+            };
 
+    // DEFAULT
+    WorldSpace current_world = WorldSpaceList[0];   //std::array return reference
+
+    //
+    //      TEMPORARY
+    //SFML
+    sf::Texture bricks_texture;
+
+    //SFML Sprite set up
+    if (!bricks_texture.loadFromFile("/home/seo/CLionProjects/physics_plane_test/bricks.jpg")) return EXIT_FAILURE;
+    WorldSpaceList[0].m_shape.setTexture(&bricks_texture);
+    WorldSpaceList[0].m_shape.setSize(sf::Vector2f (433,233));
+    WorldSpaceList[0].m_shape.setOrigin(bricks_texture.getSize().x / 2,
+                                         bricks_texture.getSize().y / 2);
+    WorldSpaceList[0].m_shape.setPosition(window.getSize().x / 2,
+                                           window.getSize().y / 2);
+    WorldSpaceList[0].m_shape.setRotation(0.f);
+
+    WorldSpaceList[1].m_shape = sf::RectangleShape(sf::Vector2f (299, 150));
+
+    sf::Clock clock;
     while (window.isOpen())
     {
 
-
         //SFML VIEW LOGIC
-        window.setView(mainView);
-        mainView.setRotation(mainView_angle * 180 / PI);
-        bricks_sprite.setRotation(bricks_angle * 180 / PI);
+        window.setView(current_world.m_worldview);
+        current_world.m_worldview.setRotation(mainView_angle * 180 / 3.1415);
+        current_world.m_shape.setRotation   (bricks_angle * 180 / 3.1415);
 
         ImGui::SFML::Update(window, clock.restart());
 
         // SFML-IMGUI EVENTS
-        for (auto event = sf::Event{}; window.pollEvent(event);)
+        for (event; window.pollEvent(event);)
         {
             ImGui::SFML::ProcessEvent(window, event);
 
@@ -68,75 +87,107 @@ int main()
             {
                 window.close();
             }
-            //MOUSE
+            //MOUSE CLICKS
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))    log = "left click detected";
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))  log = "middle click detected";
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right))   log = "right click detected";
-
-
-            //MOUSE SCROLLING
-            //https://github.com/SFML/SFML/wiki/Source:-Zoom-View-At-%28specified-pixel%29
-            float scroll_dt = (float)ImGui::GetIO().MouseWheel;
-            if (scroll_dt) // if != 0
-            {
-                mouse_scroll_val += scroll_dt;
-                mouse_scroll_val = std::clamp<float>(mouse_scroll_val, -10, 10);        // limit scrolling
-                (scroll_dt > 0) ? log = "scroll up detected": log = "scroll down detected";
-
-                auto prev_center = mainView.getCenter();
-                mainView.setCenter(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
-
-                mainView.setSize(mainView.getSize().x + mouse_scroll_val,
-                                 mainView.getSize().y + mouse_scroll_val);
-
-                mainView.setCenter(prev_center);
-
-                //update view origin
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+            {   log = "middle click detected";
 
             }
 
+            // HANDLE DRAGGING
+            DragHandler::updateDragging();
 
-            if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-                //Drag the main view
-                mainView.move(prev_mouse_pos.x - sf::Mouse::getPosition(window).x,
-                              prev_mouse_pos.y - sf::Mouse::getPosition(window).y);
-                prev_mouse_pos = sf::Mouse::getPosition(window);
+            //MOUSE SCROLLING
+            //Credit to: https://github.com/SFML/SFML/wiki/Source:-Zoom-View-At-%28specified-pixel%29
+            if (event.type == sf::Event::MouseWheelScrolled)
+            {   log = "mouse is scrolling";
+                float zoom = (event.mouseWheelScroll.delta < 0) ? 1.1: 0.9;
+
+                const sf::Vector2f beforeCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                sf::View& view = current_world.m_worldview;     // reference
+                view.zoom(zoom);
+                window.setView(view);
+                const sf::Vector2f afterCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                const sf::Vector2f offsetCoords{ beforeCoord - afterCoord };
+                view.move(offsetCoords);
+                window.setView(view);
+
             }
         }
 
-
-        ImGui::Begin("test window", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+        ImGui::Begin("INFO window", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
         if (ImGui::BeginMainMenuBar())
         {
-            if (ImGui::Button("Kinematics")) { log = "Kinematics clicked"; }
-            if (ImGui::Button("Dynamics"  )) { log = "Dynamics clicked"; }
-            if (ImGui::Button("Rotational")) { log = "Rotational clicked"; }
+            if (ImGui::Button("Kinematics"))
+            {   log = "Kinematics clicked";
 
-            ImGui::TextColored(ImVec4(244,488,30,255), "More");
+                current_world.m_isActive = false;
+                current_world = WorldSpaceList[0];
+                current_world.m_isActive = true;
+            }
+
+            if (ImGui::Button("Dynamics"))
+            {   log = "Dynamics clicked";
+
+                current_world.m_isActive = false;
+                current_world = WorldSpaceList[1];
+                current_world.m_isActive = true;
+            }
+
+            if (ImGui::Button("Rotational"))
+            {   log = "Rotational clicked";
+
+                current_world.m_isActive = false;
+                current_world = WorldSpaceList[2];
+                current_world.m_isActive = true;
+            }
+
+            ImGui::TextColored(sf::Color(211,122,56, 250), "More");
             if (ImGui::Button("Dev-Tools"))  { dev_tools_active = !dev_tools_active; }
 
             ImGui::EndMainMenuBar();
         }
 
         // Output mouse pos relative to *window
-        ImGui::Text("Mouse x");
-        ImGui::Text(std::to_string(
-                sf::Mouse::getPosition(window).x).c_str());
-        ImGui::Text("Mouse y");
-        ImGui::Text(std::to_string(
-                sf::Mouse::getPosition(window).y).c_str());
+        ImGui::Text("Mouse x: %i    Mouse y: %i",
+                sf::Mouse::getPosition(window).x,
+                sf::Mouse::getPosition(window).y);
 
-        ImGui::Text("Mouse Scroll Value");
-        ImGui::Text(std::to_string(mouse_scroll_val).c_str());
-        ImGui::Text("Mouse Scroll IO Value");
-        ImGui::Text(std::to_string(ImGui::GetIO().MouseWheel).c_str());
+        // Output mouse pos relative to screen pixels
+        ImGui::TextColored(sf::Color(211,122,56, 250), "In Screen Pixel Coords");
+        const sf::Vector2i mouse_px = window.mapCoordsToPixel(
+                static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+        ImGui::Text("Mouse x: %i    Mouse y: %i",
+                    mouse_px.x,
+                    mouse_px.y);
+
+        // Output view pos relative to *window
+        ImGui::Text("Current View centered at x: %i  y: %i",
+                            current_world.m_worldview.getCenter().x,
+                            current_world.m_worldview.getCenter().y);
+
+        ImGui::Text("DraggableRectangle pos x: %i  y: %i",
+                    DragHandler::getDraggedRectangle().getPosition().x,
+                    DragHandler::getDraggedRectangle().getPosition().y);
+
+        ImGui::Text("size x: %i  y: %i",
+                    DragHandler::getDraggedRectangle().getSize().x,
+                    DragHandler::getDraggedRectangle().getSize().y);
+
+        ImGui::Text("Delta pos x: %i  y: %i",
+                    DragHandler::getDeltaPos().x,
+                    DragHandler::getDeltaPos().y);
+        ImGui::Text("Delta pos total  x: %i  y: %i",
+                    DragHandler::getDeltaTotalPos().x,
+                    DragHandler::getDeltaTotalPos().y);
+
         ImGui::End();
-
 
         //Events
         if (dev_tools_active)
         {
-            ImGui::Begin("Pre-Build Testing Window", &dev_tools_active, ImGuiWindowFlags_AlwaysUseWindowPadding);
+            ImGui::Begin("Pre-Build Testing Window", &dev_tools_active, ImGuiWindowFlags_AlwaysAutoResize);
             //menu
             if (ImGui::BeginMenuBar())
             {
@@ -151,20 +202,19 @@ int main()
             //DEBUG
             ImGui::SliderAngle("View Rotation", &mainView_angle);
             ImGui::Text("Main_View_Rotation");
-            ImGui::Text(std::to_string(mainView_angle).c_str());
+            ImGui::Text("%f", mainView_angle);
 
             ImGui::SliderAngle("Bricks Rotation", &bricks_angle);
             ImGui::Text("Bricks_Rotation");
-            ImGui::Text(std::to_string(bricks_angle).c_str());
+            ImGui::Text("%f", bricks_angle);
 
-            ImGui::Text("Bricks_Origin");
-            ImGui::Text(std::to_string(bricks_sprite.getOrigin().x).c_str());
-            ImGui::Text(std::to_string(bricks_sprite.getOrigin().y).c_str());
 
+            ImGui::Text("Current World is:");
+            ImGui::Text("%s", current_world.m_name.c_str());
 
             //display age
             ImGui::Text("Log INFO:");
-            ImGui::Text(log.c_str());
+            ImGui::Text("%s", log.c_str());
             ImGui::End();
         }
 
@@ -172,7 +222,11 @@ int main()
 
         window.clear();
         //RENDER SFML
-        window.draw(bricks_sprite);
+        window.draw(current_world.m_shape);
+
+        //RENDER DRAGGED RECTANGLE - on condition
+        if (DragHandler::isDragging())
+            window.draw(DragHandler::getDraggedRectangle());
 
         //RENDER IMGUI
         ImGui::SFML::Render(window);

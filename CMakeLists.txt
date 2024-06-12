@@ -26,7 +26,10 @@ FetchContent_Declare(ImGui-SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(ImGui-SFML)
 
-add_executable(Physics_Demo src/main.cpp)
+add_executable(Physics_Demo src/main.cpp
+        src/DragHandler.h
+        src/DragHandler.cpp
+        src/WorldSpace.cpp)
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_features(Physics_Demo PRIVATE cxx_std_17)
 
