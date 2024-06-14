@@ -29,7 +29,13 @@ FetchContent_MakeAvailable(ImGui-SFML)
 add_executable(Physics_Demo src/main.cpp
         src/DragHandler.h
         src/DragHandler.cpp
-        src/WorldSpace.cpp)
+        src/WorldSpace.h
+        src/GUI-Tools/GuiTools.h
+        src/GUI-Tools/GuiTools.cpp
+        src/GUI-Tools/MouseStats.cpp
+        src/GUI-Tools/WorldViewStats.cpp
+        src/GridSpace.h
+        src/GridSpace.cpp)
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_features(Physics_Demo PRIVATE cxx_std_17)
 

@@ -63,7 +63,7 @@ void DragHandler::updateDragging() {
         m_prev_Pos = current_mouse;
 
         // for left-click drags only
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             // update rectangle size - independent of the current view's zoom
             m_draggedRect.setSize(static_cast<sf::Vector2f>(
                     m_window->mapCoordsToPixel(
@@ -86,9 +86,6 @@ const sf::RectangleShape &DragHandler::getDraggedRectangle() {
 
 const sf::Vector2i &DragHandler::getDeltaPos() {
     return m_deltaPos;
-}
-const sf::Vector2f &DragHandler::getDeltaPosf() {
-    return static_cast<sf::Vector2f>(m_deltaPos);
 }
 
 bool DragHandler::isDragging() {

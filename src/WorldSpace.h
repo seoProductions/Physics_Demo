@@ -8,13 +8,16 @@ struct WorldSpace {
     bool        m_isActive;
     std::string m_name;
     sf::View    m_worldview;
-    GridSpace   m_gridspace;
     //entities
     sf::RectangleShape  m_shape;
 
-    WorldSpace(std::string name) :
+    WorldSpace(std::string name)
+    :
     m_isActive(false),
-    m_name(name)        { };
+    m_name(name)
+    {
+        m_worldview.setCenter(0.f,0.f);
+    }
 };
 
 
