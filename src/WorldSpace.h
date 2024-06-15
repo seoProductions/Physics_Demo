@@ -2,7 +2,6 @@
 #define PHYSICS_DEMO_WORLDSPACE_H
 
 #include <SFML/Graphics.hpp>
-#include "GridSpace.h"
 
 struct WorldSpace {
     bool        m_isActive;

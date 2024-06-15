@@ -5,6 +5,7 @@
 
 #include "WorldSpace.h"
 #include "DragHandler.h"
+#include "GridSpace.h"
 #include "GUI-Tools/GuiTools.h"
 
 
@@ -72,7 +73,7 @@ int main()
             //Credit to: https://github.com/SFML/SFML/wiki/Source:-Zoom-View-At-%28specified-pixel%29
             if (event.type == sf::Event::MouseWheelScrolled)
             {
-                float zoom = (event.mouseWheelScroll.delta < 0) ? 1.1: 0.9;
+                float zoom = (event.mouseWheelScroll.delta < 0) ? 1.05: 0.95;
 
                 const sf::Vector2f beforeCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 sf::View& view = current_world.m_worldview;     // reference
