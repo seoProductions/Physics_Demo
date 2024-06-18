@@ -9,8 +9,9 @@
 void GuiTools::MouseStats()
 {
     ImGui::Begin("Mouse Stats", &m_MouseStats_active, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::SeparatorText("Mouse Info");
 
-    ImGui::Text("Mouse x: %i    Mouse y: %i",
+    ImGui::Text("x: %i    y: %i",
                 sf::Mouse::getPosition(*m_window).x,
                 sf::Mouse::getPosition(*m_window).y);
 
@@ -18,11 +19,11 @@ void GuiTools::MouseStats()
     ImGui::TextColored(sf::Color(211,122,56, 250), "In Screen Pixel Coords");
     const sf::Vector2i mouse_px = m_window->mapCoordsToPixel(
             static_cast<sf::Vector2f>(sf::Mouse::getPosition(*m_window)));
-    ImGui::Text("Mouse x: %i    Mouse y: %i",
+    ImGui::Text("x: %i    y: %i",
                 mouse_px.x,
                 mouse_px.y);
+    ImGui::SeparatorText("Select Rectangle Info");
 
-    ImGui::TextColored(ImColor(233,111,145), "Selected Rectangle");
     ImGui::Text("pos x: %i  y: %i",
                 DragHandler::getDraggedRectangle().getPosition().x,
                 DragHandler::getDraggedRectangle().getPosition().y);
@@ -31,7 +32,8 @@ void GuiTools::MouseStats()
                 DragHandler::getDraggedRectangle().getSize().x,
                 DragHandler::getDraggedRectangle().getSize().y);
 
-    ImGui::TextColored(ImColor(222,156,177), "Dragging");
+    ImGui::SeparatorText("Dragging Info");
+
     ImGui::Text("Delta pos x: %i  y: %i",
                 DragHandler::getDeltaPos().x,
                 DragHandler::getDeltaPos().y);
@@ -41,4 +43,5 @@ void GuiTools::MouseStats()
                 DragHandler::getDeltaTotalPos().y);
     ImGui::End();
 }
+
 

@@ -19,7 +19,7 @@ void DragHandler::init(sf::RenderWindow* window_, sf::Event* event_) {
     m_deltaPos       = { 0, 0 };
 
     // rectangle
-    m_draggedRect.setFillColor(sf::Color(170,215,230, 200));    // light blue
+    m_draggedRect.setFillColor(sf::Color(150,200,210, 180));    // light blue
 }
 
 

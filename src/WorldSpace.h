@@ -2,21 +2,33 @@
 #define PHYSICS_DEMO_WORLDSPACE_H
 
 #include <SFML/Graphics.hpp>
+#include "Entity/Entity.h";
+
+/////////////////////////////////////////////////////////////////////////
+////
+////    WorldSpace is a structure that stores helpful world data
+////    Serves as a base for each interactive world
+////
+/////////////////////////////////////////////////////////////////////////
+
 
 struct WorldSpace {
+
+    // world info
     bool        m_isActive;
     std::string m_name;
     sf::View    m_worldview;
-    //entities
-    sf::RectangleShape  m_shape;
 
-    WorldSpace(std::string name)
-    :
+    // world entities
+    std::vector<Entity> m_entity_list;  // dynamically allocated
+
+    WorldSpace(std::string name) :      // constructor
     m_isActive(false),
     m_name(name)
     {
         m_worldview.setCenter(0.f,0.f);
     }
+
 };
 
 

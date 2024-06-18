@@ -13,14 +13,14 @@ void GuiTools::ViewStats()
     // helper variable
     const sf::View& view = m_current_world->m_worldview;
 
-    ImGui::TextColored(ImColor(222,255,150), "SFML View");
+    ImGui::SeparatorText("SFML View");
     ImGui::Text("Centered at x: %f y: %f",view.getCenter().x,
                                         view.getCenter().y);
     ImGui::Text("size x: %f y: %f",   view.getSize().x,
                                     view.getSize().y);
     ImGui::Text("rotation: %f", view.getRotation());
 
-    ImGui::TextColored(ImColor(222,255,150), "SFML View Port");
+    ImGui::SeparatorText("SFML View PORT");
     ImGui::Text("Located at x: %f y: %f",   view.getViewport().getPosition().x,
                                             view.getViewport().getPosition().y);
     ImGui::Text("port size x: %f y: %f",    view.getViewport().getSize().x,

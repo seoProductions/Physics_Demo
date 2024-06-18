@@ -36,7 +36,7 @@ private:
     // calculate transparency for a given number of lines
     // more lines = more transparent
     //
-    // simply performs 255/line_count
+    // simply performs 255 * inv_sqrt(line_count)
     //
     static constexpr u_char calc_aplha(int line_count);
 

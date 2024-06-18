@@ -16,10 +16,10 @@ void GridSpace::init(WorldSpace* world_)
     m_origin_verticle.  resize(2);
     m_origin_horizontal.resize(2);
 
-    m_origin_verticle[0].color = sf::Color::Red;
-    m_origin_verticle[1].color = sf::Color::Red;
-    m_origin_horizontal[0].color = sf::Color::Red;
-    m_origin_horizontal[1].color = sf::Color::Red;
+    m_origin_verticle[0].color = sf::Color(126, 161, 191);
+    m_origin_verticle[1].color = sf::Color(126, 161, 191);
+    m_origin_horizontal[0].color = sf::Color(126, 161, 191);
+    m_origin_horizontal[1].color = sf::Color(126, 161, 191);
 
 }
 
@@ -46,8 +46,8 @@ void GridSpace::updateGrid() {
         // vertical sub-lines positioning
         sf::VertexArray sub_vertical(sf::PrimitiveType::Lines, 2);
 
-        sub_vertical[0].color = sf::Color(200, 200, 200, calc_aplha(verticle_count));
-        sub_vertical[1].color = sf::Color(200, 200, 200, calc_aplha(verticle_count));
+        sub_vertical[0].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
+        sub_vertical[1].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
 
         sub_vertical[0].position = {view_edge_x, view.getCenter().y - (view.getSize().y / 2.f)};
         sub_vertical[1].position = {view_edge_x, view.getCenter().y + (view.getSize().y / 2.f)};
@@ -67,8 +67,8 @@ void GridSpace::updateGrid() {
         // horizontal sub-lines positioning
         sf::VertexArray sub_horizontal(sf::PrimitiveType::Lines, 2);
 
-        sub_horizontal[0].color = sf::Color(200, 200, 200, calc_aplha(horizontal_count));
-        sub_horizontal[1].color = sf::Color(200, 200, 200, calc_aplha(horizontal_count));
+        sub_horizontal[0].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
+        sub_horizontal[1].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
 
 
         sub_horizontal[0].position = { view.getCenter().x - (view.getSize().x / 2.f), view_edge_y };
@@ -99,8 +99,8 @@ void GridSpace::updateGrid() {
         // horizontal sub-lines positioning
         sf::VertexArray sub_horizontal(sf::PrimitiveType::Lines, 2);
 
-        sub_horizontal[0].color = sf::Color(120, 120, 120, calc_aplha(horizontal_count));
-        sub_horizontal[1].color = sf::Color(120, 120, 120, calc_aplha(horizontal_count));
+        sub_horizontal[0].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
+        sub_horizontal[1].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
 
 
         sub_horizontal[0].position = { view.getCenter().x - (view.getSize().x / 2.f), view_edge_y };
@@ -121,8 +121,8 @@ void GridSpace::updateGrid() {
         // vertical sub-lines positioning
         sf::VertexArray sub_vertical(sf::PrimitiveType::Lines, 2);
 
-        sub_vertical[0].color = sf::Color(120, 120, 120, calc_aplha(verticle_count));
-        sub_vertical[1].color = sf::Color(120, 120, 120, calc_aplha(verticle_count));
+        sub_vertical[0].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
+        sub_vertical[1].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
 
         sub_vertical[0].position = {view_edge_x, view.getCenter().y - (view.getSize().y / 2.f)};
         sub_vertical[1].position = {view_edge_x, view.getCenter().y + (view.getSize().y / 2.f)};
@@ -161,13 +161,14 @@ constexpr float GridSpace::floor_by_digit(int64_t n_)  {
 constexpr int GridSpace::get_base_10_divisible(const int64_t n_)
 {
     //if (abs(n_) < 10 || !n_ ) return 0;      // avoid log(0)
+    if (!n_) return 0;
 
     return pow(10, ((int)log10(abs(n_))));
 }
 
 constexpr u_char GridSpace::calc_aplha(int line_count) {
     if (!line_count) return 0;      // avoid div_by0
-    return 255/line_count;
+    return 255 / sqrt(line_count);
 }
 
 const std::vector<sf::VertexArray> &GridSpace::getGridLines() {
