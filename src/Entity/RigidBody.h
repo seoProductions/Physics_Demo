@@ -43,7 +43,7 @@ private:
     sf::Vector2f m_velocity;        // window coords per sec
     sf::Vector2f m_acceleration;    // window coords per sec ^ 2
 
-    sf::Vector2f m_momentum;        // kilogram window coords per second
+    sf::Vector2f m_momentum;        // grams window coords per second
 
     static inline const sf::Vector2f m_earth_gravity  = { 0, 9.81 };
     static inline const sf::Vector2f m_moon_gravity   = { 0, 1.62 };
@@ -54,7 +54,7 @@ private:
     ////
     /////////////////
 
-    float m_mass;   // kilograms
+    float m_mass;   // grams
 
 };
 

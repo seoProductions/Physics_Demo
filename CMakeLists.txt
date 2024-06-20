@@ -6,12 +6,12 @@ project(Physics_Demo LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
+#
 include(FetchContent)
 
 FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.x)
+        GIT_TAG 2.6.1)
 FetchContent_MakeAvailable(SFML)
 
 FetchContent_Declare(ImGui
@@ -41,7 +41,9 @@ add_executable(Physics_Demo src/main.cpp
         src/Entity/Entity.h
         src/Entity/RigidBody.h
         src/Entity/RigidBody.cpp
-        src/GUI-Tools/TimeStats.cpp)
+        src/GUI-Tools/TimeStats.cpp
+        src/Random/random.hpp)
+
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_features(Physics_Demo PRIVATE cxx_std_17)

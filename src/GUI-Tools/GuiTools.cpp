@@ -165,7 +165,7 @@ void GuiTools::Entity_Properties() {
             ImGui::Text("acceleration y: %f", body.getAcceleration().y);
             ImGui::Text("momentum x: %f", body.getMomentum().x);
             ImGui::Text("momentum y: %f", body.getMomentum().y);
-            ImGui::Text("mass: %f kg", body.getMass());
+            ImGui::Text("mass: %f grams", body.getMass());
         }
     }
 

@@ -1,12 +1,12 @@
 #include "RigidBody.h"
 
-RigidBody::RigidBody(float x, float y, float mass) {
+RigidBody::RigidBody(float x, float y, const float mass) {
     m_position.x = x;
     m_position.y = y;
     m_mass       = mass;
 }
 
-RigidBody::RigidBody(const sf::Vector2f& pos, float mass)
+RigidBody::RigidBody(const sf::Vector2f& pos, const float mass)
 {
     RigidBody(pos.x, pos.y, mass);
 }

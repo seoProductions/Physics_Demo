@@ -2,10 +2,19 @@
 #ifndef PHYSICS_DEMO_GUITOOLS_H
 #define PHYSICS_DEMO_GUITOOLS_H
 
-#include "../DragHandler.h"
-#include "../WorldSpace.h"
 #include <imgui.h>
 #include <memory>
+
+#include "../DragHandler.h"
+#include "../WorldSpace.h"
+#include "../Random/random.hpp"
+
+// credit : https://github.com/ilqvya/random
+// get base random alias which is auto seeded and has static API and internal state
+using Random = effolkronium::random_static;
+
+
+
 
 class GuiTools {
 public:
