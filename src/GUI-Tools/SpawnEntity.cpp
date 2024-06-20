@@ -36,6 +36,12 @@ void GuiTools::spawnEntity()
 
     }
 
+    // Add RigidBody attribute on condition
+    entity_.m_RigidBody = std::make_shared<RigidBody>(m_current_world->m_worldview.getCenter() * -1.f);
+    if (entity_.m_shape)
+        entity_.m_RigidBody->attachObject(entity_.m_shape);
+    entity_.m_RigidBody->setVelocity(sf::Vector2f (32,4));
+
     /*// triangle set-up
     // using crazy pointer cast
     // depreciated
@@ -49,7 +55,7 @@ void GuiTools::spawnEntity()
 
     entity_.m_shape->setFillColor(sf::Color::Transparent);
     entity_.m_shape->setOutlineThickness(5.f);
-    entity_.m_shape->setOutlineColor(sf::Color(201, 255, 234));
-    entity_.m_shape->setOrigin(m_current_world->m_worldview.getCenter() * -1.f);
-    m_current_world->m_entity_list.push_back(entity_);
+    entity_.m_shape->setOutlineColor(sf::Color::Transparent);
+    entity_.m_shape->setFillColor(sf::Color(201, 255, 234));
+    m_current_world->m_entity_list.push_back(entity_);      // add to entity list
 }

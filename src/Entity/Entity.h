@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#include "Attribute.h"
+#include "RigidBody.h"
 
 struct Entity {
     std::string m_name;
@@ -13,6 +13,16 @@ struct Entity {
     // drawable and transformable - thanks to SFML
     std::shared_ptr<sf::Shape> m_shape = nullptr;     // enable polymorphism
 
+    ////////////////////////////////////////
+    ////
+    ////  Entity Attributes
+    ////  Will default to nullptr if not enabled
+    ////
+    ////////////////////////////////////////
+
+    std::shared_ptr<RigidBody> m_RigidBody = nullptr;
+    // collidable
+    // rotatable
 };
 
 

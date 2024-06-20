@@ -63,7 +63,10 @@ private:
     static void ViewStats();    // WorldViewStats.cpp
 
     inline static bool m_GridStats_active;
-    static void GridStats();
+    static void GridStats();    // GridStats.cpp
+
+    inline static bool m_TimeStats_active;
+    static void TimeStats();    // TimeStats.cpp
 
     ////////////////////////
     ////

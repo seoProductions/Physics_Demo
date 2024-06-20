@@ -39,8 +39,9 @@ add_executable(Physics_Demo src/main.cpp
         src/GUI-Tools/GridStats.cpp
         src/GUI-Tools/SpawnEntity.cpp
         src/Entity/Entity.h
-        src/Entity/Attribute.h
-        src/Entity/Attribute.cpp)
+        src/Entity/RigidBody.h
+        src/Entity/RigidBody.cpp
+        src/GUI-Tools/TimeStats.cpp)
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_features(Physics_Demo PRIVATE cxx_std_17)

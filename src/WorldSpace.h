@@ -29,7 +29,19 @@ struct WorldSpace {
         m_worldview.setCenter(0.f,0.f);
     }
 
+    void update();  // invoked every frame
+
 };
+
+void inline WorldSpace::update() {
+
+    // Update RigidBod
+    for (auto& entity : m_entity_list)
+    {
+        if (entity.m_RigidBody)
+            entity.m_RigidBody->update();
+    }
+}
 
 
 #endif //PHYSICS_DEMO_WORLDSPACE_H

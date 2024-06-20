@@ -7,6 +7,7 @@
 #include "DragHandler.h"
 #include "GridSpace.h"
 #include "GUI-Tools/GuiTools.h"
+#include "Time.h"
 
 #include "ImGuiStyle.h"
 
@@ -28,9 +29,6 @@ int main()
     DragHandler::init(&window, &event);
 
     //VIEWS
-    sf::View mainView(window.getView());
-             mainView.setCenter(mainView.getSize().x / 2,
-                                mainView.getSize().y / 2);  // middle
 
     //INIT World Space List
     std::vector<WorldSpace> WorldSpaceList =
@@ -43,6 +41,7 @@ int main()
     // DEFAULT
     WorldSpace current_world = WorldSpaceList[0];   //std::array return reference
     current_world.m_isActive = true;    // activate
+    //current_world.m_worldview.rotate(180); // positive y axis up
 
     // GUI TOOLS
     GuiTools::init(&window, &current_world, WorldSpaceList);
@@ -53,15 +52,16 @@ int main()
     GridSpace::init(&current_world);
     GridSpace::updateGrid();
 
-    sf::Clock clock;
     while (window.isOpen())
     {
+        //TIME
+        Time::updateDeltaTime();
 
         // SFML VIEW LOGIC
         window.setView(current_world.m_worldview);
 
         // Keep IMGUI in sync
-        ImGui::SFML::Update(window, clock.restart());
+        ImGui::SFML::Update(window, Time::getSFMLTime());
 
         // SFML-IMGUI EVENTS
         for (; window.pollEvent(event);)
@@ -105,10 +105,18 @@ int main()
                 // Update when current view changes
                 GridSpace::updateGrid();
             }
+
         }
 
-
         //// Dont Forget To update
+        //// Dont Forget To update
+        //// Dont Forget To update
+
+
+        // Update World
+        current_world.update();
+
+        // Update GUI
         GuiTools::updateGUI();
 
         ////////////////
