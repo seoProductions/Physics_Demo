@@ -146,6 +146,7 @@ int main()
         window.display();
     }
 
+
     ImGui::SFML::Shutdown();
     return EXIT_SUCCESS;
 }
