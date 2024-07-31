@@ -42,7 +42,9 @@ add_executable(Physics_Demo src/main.cpp
         src/Entity/RigidBody.h
         src/Entity/RigidBody.cpp
         src/GUI-Tools/TimeStats.cpp
-        src/Random/random.hpp)
+        src/Random/random.hpp
+        src/Global_COMMON.h
+        src/Global_COMMON.h)
 
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)

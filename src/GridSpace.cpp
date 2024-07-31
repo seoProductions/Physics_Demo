@@ -5,9 +5,10 @@
 
 #include "GridSpace.h"
 
-void GridSpace::init(WorldSpace* world_)
+void GridSpace::init(WorldSpace* world_, sf::RenderWindow* window_)
 {
     m_current_world = world_;
+    m_main_window   = window_;
 
     // initializing origin lines
     m_origin_verticle.  setPrimitiveType(sf::PrimitiveType::Lines);
@@ -21,11 +22,17 @@ void GridSpace::init(WorldSpace* world_)
     m_origin_horizontal[0].color = sf::Color(126, 161, 191);
     m_origin_horizontal[1].color = sf::Color(126, 161, 191);
 
+    // initialize font
+    m_font_available = false;
+    if (m_font.loadFromFile("/home/seo/CLionProjects/Physics_Demo/Resources/ProggyClean.ttf"))
+        m_font_available = true;
 }
 
 void GridSpace::updateGrid() {
 
     m_lines.clear();
+    m_lines_text.clear();
+    m_debug_vector.clear();
 
     const sf::View& view = m_current_world->m_worldview;
 
@@ -35,19 +42,24 @@ void GridSpace::updateGrid() {
     ////
     ///////////////////////
 
-    float view_edge_x = floor_by_digit(view.getCenter().x - (view.getSize().x / 2));
-    float view_edge_y = floor_by_digit(view.getCenter().y - (view.getSize().y / 2));
+    float view_edge_x = floor_by_digit( (long)(view.getCenter().x - (view.getSize().x / 2)));
+    float view_edge_y = floor_by_digit( (long)(view.getCenter().y - (view.getSize().y / 2)));
+    m_debug_vector.push_back(view_edge_x);
+
 
     // this value determines verticle line spacing
     int base_10_divisible = get_base_10_divisible(view.getSize().x);
+    m_debug_vector.push_back(base_10_divisible);
 
-    int verticle_count =  view.getSize().x /  base_10_divisible;
+    int verticle_count =  (int)view.getSize().x /  base_10_divisible;
+    m_debug_vector.push_back(verticle_count);
+
     for (int i = 0; i < verticle_count + 1; i++) {
         // vertical sub-lines positioning
         sf::VertexArray sub_vertical(sf::PrimitiveType::Lines, 2);
 
-        sub_vertical[0].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
-        sub_vertical[1].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
+        sub_vertical[0].color = sf::Color(150, 150, 150, calc_alpha(verticle_count));
+        sub_vertical[1].color = sf::Color(150, 150, 150, calc_alpha(verticle_count));
 
         sub_vertical[0].position = {view_edge_x, view.getCenter().y - (view.getSize().y / 2.f)};
         sub_vertical[1].position = {view_edge_x, view.getCenter().y + (view.getSize().y / 2.f)};
@@ -57,18 +69,48 @@ void GridSpace::updateGrid() {
 
         // update x pos for next verticle line
         view_edge_x += base_10_divisible;
+
+        if (m_font_available)
+        {
+            // sub-line's x position displayed as text
+
+            sf::Text text;
+            text.setFont(m_font);
+            text.setCharacterSize(40);
+            text.setFillColor(sf::Color(130, 200, 250, 180));
+            text.setString(std::to_string((int)view_edge_x));
+
+            clampPosToGrid(&text, view_edge_x, view_edge_x + view.getSize().x); // work in progress lol TODO
+
+            // translate coordinates from CurrentView -> Default View
+            // this ensures reliable text quality and scaling
+            const sf::View defaultView = m_main_window->getDefaultView();
+
+            text.setPosition(( m_main_window->mapPixelToCoords(
+                    m_main_window->mapCoordsToPixel(text.getPosition()),
+                    defaultView)));
+
+            text.setOrigin(sf::Vector2f (0.f,0.f));
+
+            m_lines_text.push_back(text);
+        }
     }
+    m_debug_vector.push_back(view_edge_y);
+
 
     // this value determines horizontal line spacing
-    base_10_divisible = get_base_10_divisible(view.getSize().y);
+    base_10_divisible = get_base_10_divisible((long)view.getSize().y);
+    m_debug_vector.push_back(base_10_divisible);
 
-    int horizontal_count =  view.getSize().y /  base_10_divisible;
+    int horizontal_count =  (int)view.getSize().y /  base_10_divisible;
+    m_debug_vector.push_back(horizontal_count);
+
     for (int i = 0; i < horizontal_count + 1; i++) {
         // horizontal sub-lines positioning
         sf::VertexArray sub_horizontal(sf::PrimitiveType::Lines, 2);
 
-        sub_horizontal[0].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
-        sub_horizontal[1].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
+        sub_horizontal[0].color = sf::Color(150, 150, 150, calc_alpha(horizontal_count));
+        sub_horizontal[1].color = sf::Color(150, 150, 150, calc_alpha(horizontal_count));
 
 
         sub_horizontal[0].position = { view.getCenter().x - (view.getSize().x / 2.f), view_edge_y };
@@ -87,20 +129,24 @@ void GridSpace::updateGrid() {
     ////
     ///////////////////////
 
-    view_edge_x = floor_by_digit(view.getCenter().x - (view.getSize().x / 2));
-    view_edge_y = floor_by_digit(view.getCenter().y - (view.getSize().y / 2));
+
+    view_edge_x = floor_by_digit( (long)(view.getCenter().x - (view.getSize().x / 2)) );
+    view_edge_y = floor_by_digit( (long)(view.getCenter().y - (view.getSize().y / 2)));
+    m_debug_vector.push_back(view_edge_x);
 
     // this value determines horizontal line spacing
-    base_10_divisible = get_base_10_divisible(view.getSize().y / 10);
+    base_10_divisible = get_base_10_divisible((long)view.getSize().y / 10);
+    m_debug_vector.push_back(base_10_divisible);
 
-    horizontal_count =  view.getSize().y /  base_10_divisible;
+    horizontal_count =  (int)view.getSize().y /  base_10_divisible;
+    m_debug_vector.push_back(horizontal_count);
 
     for (int i = 0; i < horizontal_count + 1; i++) {
         // horizontal sub-lines positioning
         sf::VertexArray sub_horizontal(sf::PrimitiveType::Lines, 2);
 
-        sub_horizontal[0].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
-        sub_horizontal[1].color = sf::Color(150, 150, 150, calc_aplha(horizontal_count));
+        sub_horizontal[0].color = sf::Color(150, 150, 150, calc_alpha(horizontal_count));
+        sub_horizontal[1].color = sf::Color(150, 150, 150, calc_alpha(horizontal_count));
 
 
         sub_horizontal[0].position = { view.getCenter().x - (view.getSize().x / 2.f), view_edge_y };
@@ -112,17 +158,21 @@ void GridSpace::updateGrid() {
         // update x pos for next verticle line
         view_edge_y += base_10_divisible;
     }
+    m_debug_vector.push_back(view_edge_y);
 
     // this value determines verticle line spacing
     base_10_divisible = get_base_10_divisible(view.getSize().x / 10);
+    m_debug_vector.push_back(base_10_divisible);
 
     verticle_count =  view.getSize().x /  base_10_divisible;
+    m_debug_vector.push_back(verticle_count);
+
     for (int i = 0; i < verticle_count + 1; i++) {
         // vertical sub-lines positioning
         sf::VertexArray sub_vertical(sf::PrimitiveType::Lines, 2);
 
-        sub_vertical[0].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
-        sub_vertical[1].color = sf::Color(150, 150, 150, calc_aplha(verticle_count));
+        sub_vertical[0].color = sf::Color(150, 150, 150, calc_alpha(verticle_count));
+        sub_vertical[1].color = sf::Color(150, 150, 150, calc_alpha(verticle_count));
 
         sub_vertical[0].position = {view_edge_x, view.getCenter().y - (view.getSize().y / 2.f)};
         sub_vertical[1].position = {view_edge_x, view.getCenter().y + (view.getSize().y / 2.f)};
@@ -146,9 +196,40 @@ void GridSpace::updateGrid() {
     m_origin_verticle[0].position = { 0.f, view.getCenter().y - (view.getSize().y / 2.f) };
     m_origin_verticle[1].position = { 0.f, view.getCenter().y + (view.getSize().y / 2.f) };
 
+    if (m_font_available)
+    {
+        // Origin Coords 0
+
+        sf::Text text;
+        text.setFont(m_font);
+        text.setCharacterSize(40);
+        text.setLetterSpacing(1);
+        text.setFillColor(sf::Color(130, 206, 255, 180));
+        text.setString("0");    // test TODO
+
+        clampPosToGrid(&text, 0.f, 0.f);
+
+        const sf::View defaultView = m_main_window->getDefaultView();
+        text.setPosition(( m_main_window->mapPixelToCoords(
+                m_main_window->mapCoordsToPixel(text.getPosition()),
+                defaultView)));
+
+        text.setOrigin(sf::Vector2f (0.f,0.f));
+
+        m_lines_text.push_back(text);
+    }
+
     m_lines.push_back(m_origin_verticle);
     m_lines.push_back(m_origin_horizontal);
+
+
 }
+
+///////////////////////
+////
+//// Math
+////
+///////////////////////
 
 constexpr float GridSpace::floor_by_digit(int64_t n_)  {
     //if (abs(n_) < 10 || !n_ ) return 0;      // avoid log(0)
@@ -161,19 +242,74 @@ constexpr float GridSpace::floor_by_digit(int64_t n_)  {
 constexpr int GridSpace::get_base_10_divisible(const int64_t n_)
 {
     //if (abs(n_) < 10 || !n_ ) return 0;      // avoid log(0)
-    if (!n_) return 0;
+    if (!n_) return 1;
 
     return pow(10, ((int)log10(abs(n_))));
 }
 
-constexpr u_char GridSpace::calc_aplha(int line_count) {
+
+constexpr u_char GridSpace::calc_alpha(int line_count) {
     if (!line_count) return 0;      // avoid div_by0
     return 255 / sqrt(line_count);
 }
 
+inline
+constexpr float GridSpace::clamp(float d, float min, float max) {
+    const float t = d < min ? min : d;
+    return t > max ? max : t;
+}
+
+///////////////////////
+////
+//// Position Clamping
+////
+///////////////////////
+
+void GridSpace::clampPosToGrid(sf::Transformable* object, sf::Vector2f pos) {
+    clampPosToGrid(object, pos.x, pos.y);
+}
+
+void GridSpace::clampPosToGrid(sf::Transformable* object, sf::Vector2i pos) {
+    clampPosToGrid(object, pos.x, pos.y);
+}
+
+void GridSpace::clampPosToGrid(sf::Transformable* object, float x, float y) {
+    const sf::View& view = m_current_world->m_worldview;
+
+    const int64_t left_edge_x   = view.getCenter().x - (view.getSize().x / 2);
+    const int64_t right_edge_x  = view.getCenter().x + (view.getSize().x / 2);
+    const int64_t down_edge_y   = view.getCenter().y - (view.getSize().y / 2);
+    const int64_t up_edge_y     = view.getCenter().y + (view.getSize().y / 2);
+
+    object->setPosition( clamp(x, left_edge_x, right_edge_x),
+                         clamp(y, down_edge_y, up_edge_y));
+
+}
+
+
+
+///////////////////////
+////
+//// Getters
+////
+///////////////////////
+
 const std::vector<sf::VertexArray> &GridSpace::getGridLines() {
     return m_lines;
 }
+
+const std::vector<sf::Text> &GridSpace::getGridLinesText() {
+    return m_lines_text;
+}
+
+bool GridSpace::font_available() {
+    return m_font_available;
+}
+
+std::vector<float> &GridSpace::getDebugInfo() {
+    return m_debug_vector;
+}
+
 
 
 

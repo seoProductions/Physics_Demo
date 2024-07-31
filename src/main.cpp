@@ -1,7 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include <imgui-SFML.h>
-#include <imgui.h>
-#include <algorithm>
+#include "Global_COMMON.h"      // SFML-IMGUI libraries
 
 #include "WorldSpace.h"
 #include "DragHandler.h"
@@ -10,6 +7,7 @@
 #include "Time.h"
 
 #include "ImGuiStyle.h"
+
 
 ////////////////////////////////////////////////////////////
 int main()
@@ -49,7 +47,7 @@ int main()
     style();
 
     // GRID SPACE
-    GridSpace::init(&current_world);
+    GridSpace::init(&current_world, &window);
     GridSpace::updateGrid();
 
     while (window.isOpen())
@@ -131,6 +129,7 @@ int main()
         for (const auto& lines: GridSpace::getGridLines())
             window.draw(lines);
 
+
         //RENDER SFML ENTITY ( shapes )
         for (const auto& entity: current_world.m_entity_list)
         {
@@ -140,6 +139,12 @@ int main()
         //RENDER DRAGGED RECTANGLE - on condition
         if (DragHandler::isSelecting())
             window.draw(DragHandler::getDraggedRectangle());
+
+        // RENDER GRIDSPACE TEXT
+        // on default view - preserves SFML text scaling
+        window.setView(window.getDefaultView());
+        for (const auto& text : GridSpace::getGridLinesText())
+            window.draw(text);
 
         //RENDER IMGUI
         ImGui::SFML::Render(window);
