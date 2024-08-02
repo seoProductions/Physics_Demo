@@ -54,6 +54,7 @@ void GridSpace::updateGrid() {
     int verticle_count =  (int)view.getSize().x /  base_10_divisible;
     m_debug_vector.push_back(verticle_count);
 
+
     for (int i = 0; i < verticle_count + 1; i++) {
         // vertical sub-lines positioning
         sf::VertexArray sub_vertical(sf::PrimitiveType::Lines, 2);
