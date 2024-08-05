@@ -16,19 +16,19 @@ void GuiTools::GridStats() {
         // generate iterator
         std::vector<float>::const_iterator info = GridSpace::getDebugInfo().cbegin();
 
-        ImGui::Text("first sub-line x-position starts at:  %f", *++info);
-        ImGui::Text("      sub-line x-axis interval value: %f", *++info);
-        ImGui::Text("TOTAL sub-line x-axis count:          %f", *++info);
-        ImGui::Text("first sub-line y-position starts at:  %f", *++info);
-        ImGui::Text("      sub-line y-axis interval value: %f", *++info);
-        ImGui::Text("TOTAL sub-line y-axis count:          %f", *++info);
+        ImGui::Text("first sub-line x-position starts at:  %f", *info++);
+        ImGui::Text("      sub-line x-axis interval value: %f", *info++);
+        ImGui::Text("TOTAL sub-line x-axis count:          %f", *info++);
+        ImGui::Text("first sub-line y-position starts at:  %f", *info++);
+        ImGui::Text("      sub-line y-axis interval value: %f", *info++);
+        ImGui::Text("TOTAL sub-line y-axis count:          %f", *info++);
 
-        ImGui::Text("first sub-sub-line x-position starts at:  %f", *++info);
-        ImGui::Text("      sub-sub-line x-axis interval value: %f", *++info);
-        ImGui::Text("TOTAL sub-sub-line x-axis count:          %f", *++info);
-        ImGui::Text("first sub-sub-line y-position starts at:  %f", *++info);
-        ImGui::Text("      sub-sub-line y-axis interval value: %f", *++info);
-        ImGui::Text("TOTAL sub-sub-line y-axis count:          %f", *++info);
+        ImGui::Text("first sub-sub-line x-position starts at:  %f", *info++);
+        ImGui::Text("      sub-sub-line x-axis interval value: %f", *info++);
+        ImGui::Text("TOTAL sub-sub-line x-axis count:          %f", *info++);
+        ImGui::Text("first sub-sub-line y-position starts at:  %f", *info++);
+        ImGui::Text("      sub-sub-line y-axis interval value: %f", *info++);
+        ImGui::Text("TOTAL sub-sub-line y-axis count:          %f", *info++);
     }
     else
     {

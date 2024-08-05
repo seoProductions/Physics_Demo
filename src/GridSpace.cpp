@@ -68,9 +68,6 @@ void GridSpace::updateGrid() {
         // add to be drawn
         m_lines.push_back(sub_vertical);
 
-        // update x pos for next verticle line
-        view_edge_x += base_10_divisible;
-
         if (m_font_available)
         {
             // sub-line's x position displayed as text
@@ -81,7 +78,8 @@ void GridSpace::updateGrid() {
             text.setFillColor(sf::Color(130, 200, 250, 180));
             text.setString(std::to_string((int)view_edge_x));
 
-            clampPosToGrid(&text, view_edge_x, view_edge_x + view.getSize().x); // work in progress lol TODO
+            text.setPosition(view_edge_x, 0.f);
+            clampPosToGrid(&text);
 
             // translate coordinates from CurrentView -> Default View
             // this ensures reliable text quality and scaling
@@ -91,13 +89,13 @@ void GridSpace::updateGrid() {
                     m_main_window->mapCoordsToPixel(text.getPosition()),
                     defaultView)));
 
-            text.setOrigin(sf::Vector2f (0.f,0.f));
-
             m_lines_text.push_back(text);
         }
+        // update x pos for next verticle line and repeat
+        view_edge_x += base_10_divisible;
     }
-    m_debug_vector.push_back(view_edge_y);
 
+    m_debug_vector.push_back(view_edge_y);
 
     // this value determines horizontal line spacing
     base_10_divisible = get_base_10_divisible((long)view.getSize().y);
@@ -120,7 +118,30 @@ void GridSpace::updateGrid() {
         // add to be drawn
         m_lines.push_back(sub_horizontal);
 
-        // update x pos for next verticle line
+        if (m_font_available)
+        {
+            // sub-line's y position displayed as text
+
+            sf::Text text;
+            text.setFont(m_font);
+            text.setCharacterSize(40);
+            text.setFillColor(sf::Color(150, 220, 240, 180));
+            text.setString(std::to_string((int)view_edge_y));
+
+            text.setPosition(0.f, view_edge_y);
+            clampPosToGrid(&text);
+
+            // translate coordinates from CurrentView -> Default View
+            // this ensures reliable text quality and scaling
+            const sf::View defaultView = m_main_window->getDefaultView();
+
+            text.setPosition(( m_main_window->mapPixelToCoords(
+                    m_main_window->mapCoordsToPixel(text.getPosition()),
+                    defaultView)));
+
+            m_lines_text.push_back(text);
+        }
+        // update y pos for next verticle line and repeat
         view_edge_y += base_10_divisible;
     }
 
@@ -206,16 +227,14 @@ void GridSpace::updateGrid() {
         text.setCharacterSize(40);
         text.setLetterSpacing(1);
         text.setFillColor(sf::Color(130, 206, 255, 180));
-        text.setString("0");    // test TODO
+        text.setString("0");
 
-        clampPosToGrid(&text, 0.f, 0.f);
+        clampPosToGrid(&text);
 
         const sf::View defaultView = m_main_window->getDefaultView();
         text.setPosition(( m_main_window->mapPixelToCoords(
                 m_main_window->mapCoordsToPixel(text.getPosition()),
                 defaultView)));
-
-        text.setOrigin(sf::Vector2f (0.f,0.f));
 
         m_lines_text.push_back(text);
     }
@@ -266,15 +285,7 @@ constexpr float GridSpace::clamp(float d, float min, float max) {
 ////
 ///////////////////////
 
-void GridSpace::clampPosToGrid(sf::Transformable* object, sf::Vector2f pos) {
-    clampPosToGrid(object, pos.x, pos.y);
-}
-
-void GridSpace::clampPosToGrid(sf::Transformable* object, sf::Vector2i pos) {
-    clampPosToGrid(object, pos.x, pos.y);
-}
-
-void GridSpace::clampPosToGrid(sf::Transformable* object, float x, float y) {
+void GridSpace::clampPosToGrid(sf::Transformable* object ) {
     const sf::View& view = m_current_world->m_worldview;
 
     const int64_t left_edge_x   = view.getCenter().x - (view.getSize().x / 2);
@@ -282,8 +293,8 @@ void GridSpace::clampPosToGrid(sf::Transformable* object, float x, float y) {
     const int64_t down_edge_y   = view.getCenter().y - (view.getSize().y / 2);
     const int64_t up_edge_y     = view.getCenter().y + (view.getSize().y / 2);
 
-    object->setPosition( clamp(x, left_edge_x, right_edge_x),
-                         clamp(y, down_edge_y, up_edge_y));
+    object->setPosition( clamp(object->getPosition().x , left_edge_x, right_edge_x),
+                         clamp(object->getPosition().y , down_edge_y, up_edge_y));
 
 }
 

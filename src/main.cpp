@@ -96,7 +96,7 @@ int main()
             // Drag the view on Middle-Click Drag
             if (DragHandler::isDragging() && !DragHandler::isSelecting())
             {
-                // messy world view translation :o
+                // messy world view translation :o TODO looking for fix
                 current_world.m_worldview.move(-static_cast<sf::Vector2f>(window.mapCoordsToPixel(
                         window.mapPixelToCoords(DragHandler::getDeltaPos()))));        // translate to pixel coords
 

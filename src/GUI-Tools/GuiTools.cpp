@@ -12,14 +12,14 @@
     m_world_list = world_list_;
     m_current_world = world_;
 
-    m_Entity_Properties_active = true;
+    m_Entity_Properties_active = false;
     m_World_Properties_active = false;
     m_Settings_active   = false;
     m_DevTools_active   = false;
 
     m_MouseStats_active = false;
     m_ViewStats_active  = false;
-    m_GridStats_active  = false;
+    m_GridStats_active  = true;
     m_TimeStats_active  = true;
 
 }

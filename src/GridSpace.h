@@ -39,10 +39,7 @@ public:
     static
     bool font_available();
 
-    // clamp a given object's position inside the GridSpace
-    static void clampPosToGrid(sf::Transformable*, sf::Vector2f pos);
-    static void clampPosToGrid(sf::Transformable*, sf::Vector2i pos);
-    static void clampPosToGrid(sf::Transformable*, float x, float y);
+    static void clampPosToGrid(sf::Transformable* );
 
 
 private:
