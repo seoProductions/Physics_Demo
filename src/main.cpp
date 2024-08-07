@@ -89,6 +89,7 @@ int main()
                 view.move(offsetCoords);
                 window.setView(view);
 
+
                 // Update when current view changes
                 GridSpace::updateGrid();
             }
