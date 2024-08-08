@@ -2,37 +2,59 @@
 #define PHYSICS_DEMO_WORLDSPACE_H
 
 #include <SFML/Graphics.hpp>
+#include <functional>
 #include "Entity/Entity.h";
+
 
 /////////////////////////////////////////////////////////////////////////
 ////
-////    WorldSpace is a structure that stores helpful world data
+////    WorldSpace is a class that stores helpful world data
 ////    Serves as a base for each interactive world
 ////
 /////////////////////////////////////////////////////////////////////////
 
-struct WorldSpace {
+class WorldSpace {
+public:
 
-    // world info
-    bool        m_isActive;
+    WorldSpace(const std::string& name);
+
+    //////////////////////
+    ////
+    //// World Behavior
+    ////
+    //////////////////////
+
+    std::function< void()> start();         // to be initialized outside of class
+    std::function< void()> update();
+    std::function< void()> end();
+
+    void Pause();
+    void UnPause();
+    void Activate();
+    void DeActivate();
+
+    //////////////////////
+    ////
+    //// World Info
+    ////
+    //////////////////////
+
+    // world entities
+    std::vector<Entity> m_entity_list;
+
     std::string m_name;
     sf::View    m_worldview;
 
-    // world entities
-    std::vector<Entity> m_entity_list;  // dynamically allocated
+private:
 
-    WorldSpace(std::string name) :      // constructor
-    m_isActive(false),
-    m_name(name)
-    {
-        m_worldview.setCenter(0.f,0.f);
-    }
+    bool        m_isPaused;
+    bool        m_isActive;
 
-    void update();  // invoked every frame
 
 };
 
-void inline WorldSpace::update() {
+
+/*void inline WorldSpace::update() {
 
     // Update RigidBod
     for (auto& entity : m_entity_list)
@@ -40,7 +62,7 @@ void inline WorldSpace::update() {
         if (entity.m_RigidBody)
             entity.m_RigidBody->update();
     }
-}
+}*/
 
 
 #endif //PHYSICS_DEMO_WORLDSPACE_H

@@ -37,9 +37,8 @@ int main()
             };
 
     // DEFAULT
-    WorldSpace current_world = WorldSpaceList[0];   //std::array return reference
-    current_world.m_isActive = true;    // activate
-    //current_world.m_worldview.rotate(180); // positive y axis up
+    WorldSpace current_world = WorldSpaceList[0];
+    current_world.Activate();
 
     // GUI TOOLS
     GuiTools::init(&window, &current_world, WorldSpaceList);
@@ -111,9 +110,8 @@ int main()
         //// Dont Forget To update
         //// Dont Forget To update
 
-
         // Update World
-        current_world.update();
+        //current_world.update();
 
         // Update GUI
         GuiTools::updateGUI();

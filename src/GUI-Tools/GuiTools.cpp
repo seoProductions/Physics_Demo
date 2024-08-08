@@ -37,25 +37,25 @@ void GuiTools::updateGUI() {
     {
         if (ImGui::Button("Motion"))
         {
-            m_current_world->m_isActive = false;
+            m_current_world->DeActivate();
             m_current_world = &m_world_list[0];
-            m_current_world->m_isActive = true;
+            m_current_world->Activate();
         }
 
         if (ImGui::Button("Forces"))
         {
 
-            m_current_world->m_isActive = false;
+            m_current_world->DeActivate();
             m_current_world = &m_world_list[1];
-            m_current_world->m_isActive = true;
+            m_current_world->Activate();
         }
 
         if (ImGui::Button("Rotation"))
         {
 
-            m_current_world->m_isActive = false;
+            m_current_world->DeActivate();
             m_current_world = &m_world_list[2];
-            m_current_world->m_isActive = true;
+            m_current_world->Activate();
         }
 
         ImGui::TextColored(sf::Color(211,122,56, 250), "More");
