@@ -69,6 +69,23 @@ int main()
             {
                 window.close();
             }
+            if (ImGui::IsKeyPressed(ImGuiKey_Space)) current_world.TogglePause();
+
+            /*// KEY PRESSES, Using IMGUI backend here
+            if (ImGui::IsKeyPressed(ImGuiKey_Space)) current_world.TogglePause();
+            if (ImGui::IsKeyDown(ImGuiKey_W))
+            {
+                current_world.m_worldview.move({ 0.f, 10.f});
+                // Update when current view changes
+                GridSpace::updateGrid();
+            };
+*/
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            {
+                current_world.m_worldview.move({ 10.f, 0.f});
+                // Update when current view changes
+                GridSpace::updateGrid();
+            }
 
             // HANDLE DRAGGING
             DragHandler::updateDragging();
@@ -104,6 +121,33 @@ int main()
                 GridSpace::updateGrid();
             }
 
+        }
+
+        const float VIEW_SPEED = 500.f;   // scale factor
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            current_world.m_worldview.move({ current_world.m_worldview.getSize().x / VIEW_SPEED, 0.f });
+            // Update when current view changes
+            GridSpace::updateGrid();
+        }
+
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            current_world.m_worldview.move({ -current_world.m_worldview.getSize().x / VIEW_SPEED, 0.f });
+            // Update when current view changes
+            GridSpace::updateGrid();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
+            current_world.m_worldview.move({ 0.f, -current_world.m_worldview.getSize().y / VIEW_SPEED });
+            // Update when current view changes
+            GridSpace::updateGrid();
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
+            current_world.m_worldview.move({ 0.f, current_world.m_worldview.getSize().y / VIEW_SPEED });
+            // Update when current view changes
+            GridSpace::updateGrid();
         }
 
         //// Dont Forget To update

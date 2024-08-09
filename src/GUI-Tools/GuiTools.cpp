@@ -13,13 +13,13 @@
     m_current_world = world_;
 
     m_Entity_Properties_active = false;
-    m_World_Properties_active = false;
+    m_World_Properties_active = true;
     m_Settings_active   = false;
     m_DevTools_active   = false;
 
     m_MouseStats_active = false;
     m_ViewStats_active  = false;
-    m_GridStats_active  = true;
+    m_GridStats_active  = false;
     m_TimeStats_active  = true;
 
 }
@@ -35,31 +35,38 @@ void GuiTools::updateGUI() {
 
     if (ImGui::BeginMainMenuBar())
     {
+
         if (ImGui::Button("Motion"))
         {
             m_current_world->DeActivate();
+            m_current_world->paused();
             m_current_world = &m_world_list[0];
             m_current_world->Activate();
+            m_current_world->paused();
         }
 
         if (ImGui::Button("Forces"))
         {
 
             m_current_world->DeActivate();
+            m_current_world->paused();
             m_current_world = &m_world_list[1];
             m_current_world->Activate();
+            m_current_world->paused();
         }
 
         if (ImGui::Button("Rotation"))
         {
-
             m_current_world->DeActivate();
+            m_current_world->paused();
             m_current_world = &m_world_list[2];
             m_current_world->Activate();
+            m_current_world->paused();
         }
 
         ImGui::TextColored(sf::Color(211,122,56, 250), "More");
 
+        // toggable buttons
         if (ImGui::Button("Entity Info")) { m_Entity_Properties_active = !m_Entity_Properties_active; }
         if (ImGui::Button("World Info")) { m_World_Properties_active = !m_World_Properties_active; }
         if (ImGui::Button("Dev-Tools"))  { m_DevTools_active = !m_DevTools_active; }
@@ -67,43 +74,6 @@ void GuiTools::updateGUI() {
 
         ImGui::EndMainMenuBar();
     }
-
-    ///////////////////////
-    ////
-    //// ToolBar
-    ////
-    ///////////////////////
-
-    auto toolbarFlags = static_cast<ImGuiWindowFlags_>(ImGuiWindowFlags_NoScrollWithMouse |
-                                                                    ImGuiWindowFlags_NoSavedSettings   |ImGuiWindowFlags_AlwaysAutoResize  |
-                                                                    ImGuiWindowFlags_NoCollapse);
-    ImGui::Begin("Tools", nullptr, toolbarFlags);
-    if (ImGui::Selectable("Rectangle"))
-    {
-        m_tool_shape = rectangle;
-        spawnEntity();
-    }
-    if (ImGui::Selectable("Circle"))
-    {
-        m_tool_shape = circle;
-        spawnEntity();
-    }
-    if (ImGui::Selectable("Triangle"))
-    {
-        m_tool_shape = triangle;
-        spawnEntity();
-    }
-    if (ImGui::Selectable("Pentagon"))
-    {
-        m_tool_shape = pentagon;
-        spawnEntity();
-    }
-    if (ImGui::Selectable("Hexagon"))
-    {
-        m_tool_shape = hexagon;
-        spawnEntity();
-    }
-    ImGui::End();
 
 
     ///////////////////////
@@ -135,6 +105,44 @@ void GuiTools::updateGUI() {
         GridStats();
     if (m_TimeStats_active)
         TimeStats();
+
+    ///////////////////////
+    ////
+    //// ToolBar
+    ////
+    ///////////////////////
+    if (m_current_world->paused()) return;
+
+    auto toolbarFlags = static_cast<ImGuiWindowFlags_>(ImGuiWindowFlags_NoScrollWithMouse |
+                                                       ImGuiWindowFlags_NoSavedSettings   |ImGuiWindowFlags_AlwaysAutoResize  |
+                                                       ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Tools", nullptr, toolbarFlags);
+    if (ImGui::Selectable("Rectangle"))
+    {
+        m_tool_shape = rectangle;
+        spawnEntity();
+    }
+    if (ImGui::Selectable("Circle"))
+    {
+        m_tool_shape = circle;
+        spawnEntity();
+    }
+    if (ImGui::Selectable("Triangle"))
+    {
+        m_tool_shape = triangle;
+        spawnEntity();
+    }
+    if (ImGui::Selectable("Pentagon"))
+    {
+        m_tool_shape = pentagon;
+        spawnEntity();
+    }
+    if (ImGui::Selectable("Hexagon"))
+    {
+        m_tool_shape = hexagon;
+        spawnEntity();
+    }
+    ImGui::End();
 }
 
 
@@ -175,14 +183,21 @@ void GuiTools::Entity_Properties() {
 
 void GuiTools::World_Properties() {
     ImGui::Begin("World Properties", &m_Entity_Properties_active, ImGuiWindowFlags_AlwaysAutoResize);
-    if (ImGui::BeginMenuBar()) {
+    if (ImGui::BeginMenuBar()) {    // TODO NOT WORKING FIX
         ImGui::Button("Select");
         ImGui::Button("Delete");
         ImGui::EndMenuBar();
     }
 
-    ImGui::LabelText("###Entity count" ," %zu total Entities", m_current_world->m_entity_list.size());
+    ImGui::TextColored( ImColor(179, 200, 155),
+                        "World is %s and %s", (m_current_world->active()) ? "ACTIVE": "NOT ACTIVE", (m_current_world->paused()) ? "PAUSED" : "RUNNING");
+    if (ImGui::SmallButton("Manual Pause/Unpause")) m_current_world->TogglePause();
 
+    ImGui::LabelText("###Entity count" ," %zu total Entities", m_current_world->m_entity_list.size());
+    ImGui::Separator();
+
+
+    // TODO make this selectable
     for (auto& entity : m_current_world->m_entity_list)
     {
         ImGui::Text("%s" ,entity.m_name.c_str());

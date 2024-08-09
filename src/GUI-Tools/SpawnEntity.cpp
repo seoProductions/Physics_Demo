@@ -42,7 +42,7 @@ void GuiTools::spawnEntity()
     entity_.m_RigidBody = std::make_shared<RigidBody>(m_current_world->m_worldview.getCenter() * -1.f, mass_);
     if (entity_.m_shape)
         entity_.m_RigidBody->attachObject(entity_.m_shape);
-    entity_.m_RigidBody->setVelocity(sf::Vector2f (32,4));
+    entity_.m_RigidBody->setVelocity(sf::Vector2f (3402,4));
 
     /*// triangle set-up
     // using crazy pointer cast

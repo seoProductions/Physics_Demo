@@ -30,6 +30,7 @@ add_executable(Physics_Demo src/main.cpp
         src/DragHandler.h
         src/DragHandler.cpp
         src/WorldSpace.h
+        src/WorldSpace.cpp
         src/GridSpace.h
         src/GridSpace.cpp
         src/GUI-Tools/GuiTools.h
@@ -42,9 +43,7 @@ add_executable(Physics_Demo src/main.cpp
         src/Entity/RigidBody.h
         src/Entity/RigidBody.cpp
         src/GUI-Tools/TimeStats.cpp
-        src/Random/random.hpp
-        src/Global_COMMON.h
-        src/Global_COMMON.h)
+        src/Random/random.hpp)
 
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)

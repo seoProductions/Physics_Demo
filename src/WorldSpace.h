@@ -23,15 +23,22 @@ public:
     //// World Behavior
     ////
     //////////////////////
+    static void initBehavior();             // pre-defined behavior
 
     std::function< void()> start();         // to be initialized outside of class
     std::function< void()> update();
     std::function< void()> end();
+    std::function< void()> spawnEntity();   // avaliable when unpaused & active
 
     void Pause();
     void UnPause();
+    void TogglePause();
     void Activate();
     void DeActivate();
+
+    bool active();
+    bool paused();
+
 
     //////////////////////
     ////
