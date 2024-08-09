@@ -39,10 +39,11 @@ public:
     static const sf::Vector2i&       getDeltaPos ();
     static const sf::Vector2i&       getDeltaTotalPos();
     static const sf::Vector2i&       getOriginPos();
+    static const sf::Vector2f        getDeltaPosLocal();
 
 private:
     inline static sf::RectangleShape m_draggedRect = sf::RectangleShape(sf::Vector2f (0.f, 0.f));
-    inline static sf::Vector2i       m_orig_Pos;
+    inline static sf::Vector2i      m_orig_Pos;
     inline static sf::Vector2i       m_prev_Pos;
     inline static sf::Vector2i       m_deltaPos;
     inline static sf::Vector2i       m_deltaPos_total;

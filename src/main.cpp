@@ -14,7 +14,7 @@ int main()
 {
     // Set up SFML window
     sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
+    settings.antialiasingLevel = 4;
 
     auto window = sf::RenderWindow{ { 1920u, 1080u }, "Cmake with SFML with Dear IMGUI Demo!", sf::Style::Default, settings };
     window.setFramerateLimit(144);
@@ -65,27 +65,13 @@ int main()
         {
             ImGui::SFML::ProcessEvent(window, event);
 
+            // WINDOW CLOSE
             if (event.type == sf::Event::Closed)
             {
                 window.close();
             }
+            // PAUSING
             if (ImGui::IsKeyPressed(ImGuiKey_Space)) current_world.TogglePause();
-
-            /*// KEY PRESSES, Using IMGUI backend here
-            if (ImGui::IsKeyPressed(ImGuiKey_Space)) current_world.TogglePause();
-            if (ImGui::IsKeyDown(ImGuiKey_W))
-            {
-                current_world.m_worldview.move({ 0.f, 10.f});
-                // Update when current view changes
-                GridSpace::updateGrid();
-            };
-*/
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
-                current_world.m_worldview.move({ 10.f, 0.f});
-                // Update when current view changes
-                GridSpace::updateGrid();
-            }
 
             // HANDLE DRAGGING
             DragHandler::updateDragging();
@@ -113,9 +99,8 @@ int main()
             // Drag the view on Middle-Click Drag
             if (DragHandler::isDragging() && !DragHandler::isSelecting())
             {
-                // messy world view translation :o TODO looking for fix
-                current_world.m_worldview.move(-static_cast<sf::Vector2f>(window.mapCoordsToPixel(
-                        window.mapPixelToCoords(DragHandler::getDeltaPos()))));        // translate to pixel coords
+                // messy world view translation :o TODO looking for fix - deltaPos bugs - UNSTABLE at LARGE COORDS
+                current_world.m_worldview.move(DragHandler::getDeltaPosLocal());
 
                 // Update when current view changes
                 GridSpace::updateGrid();

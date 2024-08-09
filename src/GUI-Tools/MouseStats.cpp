@@ -33,7 +33,8 @@ void GuiTools::MouseStats()
                 DragHandler::getDraggedRectangle().getSize().y);
 
     ImGui::SeparatorText("Dragging Info");
-
+    ImGui::Text("%s and %s", DragHandler::isDragging() ? "Mouse dragging":"Mouse NOT dragging",
+                DragHandler::isSelecting() ? "currently selecting": "NOT selecting");
     ImGui::Text("Delta pos x: %i  y: %i",
                 DragHandler::getDeltaPos().x,
                 DragHandler::getDeltaPos().y);

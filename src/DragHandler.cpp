@@ -23,7 +23,8 @@ void DragHandler::init(sf::RenderWindow* window_, sf::Event* event_) {
 }
 
 
-void DragHandler::updateDragging() {
+void DragHandler::updateDragging()
+{
     // filter out non-left & non-middle clicks
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))    m_selecting = true;
     else
@@ -36,7 +37,7 @@ void DragHandler::updateDragging() {
     }
 
     // obtain mouse pos
-    const sf::Vector2i current_mouse = static_cast<sf::Vector2i>(
+    const sf::Vector2i current_mouse =  static_cast<sf::Vector2i>(
             m_window->mapPixelToCoords(sf::Mouse::getPosition(*m_window)));     // align with current view
 
     // when first clicked
@@ -53,7 +54,7 @@ void DragHandler::updateDragging() {
     }
 
     // if dragging
-    if (m_event->type = sf::Event::MouseMoved)
+    if (m_event->type == sf::Event::MouseMoved)
     {
         // update total change
         m_deltaPos_total = current_mouse - m_orig_Pos;
@@ -67,7 +68,7 @@ void DragHandler::updateDragging() {
             // update rectangle size - independent of the current view's zoom
             m_draggedRect.setSize(static_cast<sf::Vector2f>(
                     m_window->mapCoordsToPixel(
-                            m_window->mapPixelToCoords(m_deltaPos_total))));        // translate to pixel coords
+                    m_window->mapPixelToCoords(m_deltaPos_total))));        // translate to pixel coords
     }
     else
         m_deltaPos = { 0, 0 };  // no change in mouse pos
@@ -102,6 +103,13 @@ const sf::Vector2i &DragHandler::getDeltaTotalPos() {
 
 bool DragHandler::isSelecting() {
     return m_selecting;
+}
+
+// will return copy, the negation here is done to match the world view coordinates & grid view coordinates
+const sf::Vector2f DragHandler::getDeltaPosLocal() {
+    return -static_cast<sf::Vector2f>(
+            m_window->mapCoordsToPixel(
+            m_window->mapPixelToCoords(DragHandler::getDeltaPos())));
 }
 
 
