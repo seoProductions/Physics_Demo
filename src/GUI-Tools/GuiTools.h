@@ -18,7 +18,7 @@ using Random = effolkronium::random_static;
 
 class GuiTools {
 public:
-    static void init(sf::RenderWindow*, WorldSpace*, std::vector<WorldSpace>&);
+    static void init(sf::RenderWindow*, WorldSpace*, std::array<WorldSpace, 4>&);
     static void updateGUI();        // invoked every frame
 
     // conditional windows
@@ -30,7 +30,6 @@ public:
     // toolbar status
     enum tool
             { rectangle = 0,
-              circle,
               triangle,
               pentagon,
               hexagon,
@@ -46,7 +45,7 @@ private:
     inline static sf::RenderWindow* m_window;
     inline static WorldSpace*       m_current_world;
     inline static
-    std::vector<WorldSpace>         m_world_list;
+    std::array<WorldSpace, 4>       m_world_list { };
 
     ////////////////
     ////

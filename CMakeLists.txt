@@ -38,7 +38,6 @@ add_executable(Physics_Demo src/main.cpp
         src/GUI-Tools/MouseStats.cpp
         src/GUI-Tools/WorldViewStats.cpp
         src/GUI-Tools/GridStats.cpp
-        src/GUI-Tools/SpawnEntity.cpp
         src/Entity/Entity.h
         src/Entity/RigidBody.h
         src/Entity/RigidBody.cpp

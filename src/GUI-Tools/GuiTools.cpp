@@ -6,7 +6,7 @@
 ////
 /////////////////////////////////////////
 
- void GuiTools::init(sf::RenderWindow* window_, WorldSpace* world_, std::vector<WorldSpace>& world_list_)
+ void GuiTools::init(sf::RenderWindow* window_, WorldSpace* world_, std::array<WorldSpace, 4>& world_list_)
  {
     m_window = window_;
     m_world_list = world_list_;
@@ -35,38 +35,48 @@ void GuiTools::updateGUI() {
 
     if (ImGui::BeginMainMenuBar())
     {
-
-        if (ImGui::Button("Motion"))
+        // handy structured binding
+        auto& [Kinematics, Forces, Torque, Sandbox] = m_world_list;
+        if (ImGui::Button(Kinematics.m_name.c_str()))
         {
             m_current_world->DeActivate();
             m_current_world->paused();
-            m_current_world = &m_world_list[0];
+            m_current_world = &Kinematics;
             m_current_world->Activate();
             m_current_world->paused();
         }
 
-        if (ImGui::Button("Forces"))
+        if (ImGui::Button(Forces.m_name.c_str()))
         {
 
             m_current_world->DeActivate();
             m_current_world->paused();
-            m_current_world = &m_world_list[1];
+            m_current_world = &Forces;
             m_current_world->Activate();
             m_current_world->paused();
         }
 
-        if (ImGui::Button("Rotation"))
+        if (ImGui::Button(Torque.m_name.c_str()))
         {
             m_current_world->DeActivate();
             m_current_world->paused();
-            m_current_world = &m_world_list[2];
+            m_current_world = &Torque;
+            m_current_world->Activate();
+            m_current_world->paused();
+        }
+
+        if (ImGui::Button(Sandbox.m_name.c_str()))
+        {
+            m_current_world->DeActivate();
+            m_current_world->paused();
+            m_current_world = &Sandbox;
             m_current_world->Activate();
             m_current_world->paused();
         }
 
         ImGui::TextColored(sf::Color(211,122,56, 250), "More");
 
-        // toggable buttons
+        // toggle buttons
         if (ImGui::Button("Entity Info")) { m_Entity_Properties_active = !m_Entity_Properties_active; }
         if (ImGui::Button("World Info")) { m_World_Properties_active = !m_World_Properties_active; }
         if (ImGui::Button("Dev-Tools"))  { m_DevTools_active = !m_DevTools_active; }
@@ -106,41 +116,40 @@ void GuiTools::updateGUI() {
     if (m_TimeStats_active)
         TimeStats();
 
-    ///////////////////////
+    ///////////////////////////////////
     ////
-    //// ToolBar
+    //// ToolBar (available if paused)
     ////
-    ///////////////////////
+    ///////////////////////////////////
     if (m_current_world->paused()) return;
 
     auto toolbarFlags = static_cast<ImGuiWindowFlags_>(ImGuiWindowFlags_NoScrollWithMouse |
                                                        ImGuiWindowFlags_NoSavedSettings   |ImGuiWindowFlags_AlwaysAutoResize  |
+
                                                        ImGuiWindowFlags_NoCollapse);
+    // Switch Case-Statements would disallow the button creation inside the condition
     ImGui::Begin("Tools", nullptr, toolbarFlags);
     if (ImGui::Selectable("Rectangle"))
     {
         m_tool_shape = rectangle;
-        spawnEntity();
-    }
-    if (ImGui::Selectable("Circle"))
-    {
-        m_tool_shape = circle;
-        spawnEntity();
+        m_current_world->spawnEntity({ 0.f, 0.f});
     }
     if (ImGui::Selectable("Triangle"))
     {
         m_tool_shape = triangle;
-        spawnEntity();
+        m_current_world->spawnEntity({ 0.f, 0.f});
     }
     if (ImGui::Selectable("Pentagon"))
     {
         m_tool_shape = pentagon;
-        spawnEntity();
+        m_current_world->spawnEntity({ 0.f, 0.f});
+
     }
     if (ImGui::Selectable("Hexagon"))
     {
         m_tool_shape = hexagon;
-        spawnEntity();
+        m_current_world->spawnEntity({ 0.f, 0.f});
+
     }
     ImGui::End();
 }
@@ -162,7 +171,7 @@ void GuiTools::Entity_Properties() {
         {
             ImGui::SeparatorText("RigidBody-Properties");
 
-            // generate refrence to current body
+            // generate reference to current body
             RigidBody& body = *m_current_world->m_entity_list[0].m_RigidBody;
 
             ImGui::Text("position x: %f", body.getPosition().x);
@@ -196,6 +205,7 @@ void GuiTools::World_Properties() {
     ImGui::LabelText("###Entity count" ," %zu total Entities", m_current_world->m_entity_list.size());
     ImGui::Separator();
 
+    //ImGui::ListBox()
 
     // TODO make this selectable
     for (auto& entity : m_current_world->m_entity_list)

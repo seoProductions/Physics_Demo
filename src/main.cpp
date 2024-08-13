@@ -1,5 +1,3 @@
-#include "Global_COMMON.h"      // SFML-IMGUI libraries
-
 #include "WorldSpace.h"
 #include "DragHandler.h"
 #include "GridSpace.h"
@@ -29,14 +27,17 @@ int main()
     //VIEWS
 
     //INIT World Space List
-    std::vector<WorldSpace> WorldSpaceList =
+    std::array<WorldSpace, 4> WorldSpaceList =
             {
-                WorldSpace("Motion"),
-                WorldSpace("Forces"),
-                WorldSpace("Rotation"),
+                WorldSpace("Vectors & 2D Kinematics"),
+                WorldSpace("Forces & RigidBodies"),
+                WorldSpace("Torque & Rotation"),
+                WorldSpace("Sandbox FFA")
             };
 
-    // DEFAULT
+    WorldSpace::initBehavior(WorldSpaceList);   // pass reference
+
+    // Demo will start on World 0
     WorldSpace current_world = WorldSpaceList[0];
     current_world.Activate();
 
@@ -48,6 +49,9 @@ int main()
     // GRID SPACE
     GridSpace::init(&current_world, &window);
     GridSpace::updateGrid();
+
+    // Set-up World 0
+    current_world.start();
 
     while (window.isOpen())
     {
@@ -139,8 +143,9 @@ int main()
         //// Dont Forget To update
         //// Dont Forget To update
 
-        // Update World
-        //current_world.update();
+        // call to UNIQUE world update() on condition
+        if (!current_world.paused())
+            current_world.update();
 
         // Update GUI
         GuiTools::updateGUI();
@@ -162,7 +167,7 @@ int main()
         for (const auto& entity: current_world.m_entity_list)
         {
             window.draw(*entity.m_shape);
-        }
+            }
 
         //RENDER DRAGGED RECTANGLE - on condition
         if (DragHandler::isSelecting())
