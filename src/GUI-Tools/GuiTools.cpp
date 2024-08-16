@@ -205,6 +205,8 @@ void GuiTools::World_Properties() {
     ImGui::LabelText("###Entity count" ," %zu total Entities", m_current_world->m_entity_list.size());
     ImGui::Separator();
 
+    // TODO: Reset Button
+
     //ImGui::ListBox()
 
     // TODO make this selectable

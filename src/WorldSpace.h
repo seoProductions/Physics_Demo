@@ -6,7 +6,7 @@
 #include "Entity/Entity.h"
 #include "Random/random.hpp"
 
-// credit : https://gSithub.com/ilqvya/random
+// credit : https://github.com/ilqvya/random
 // get base random alias which is auto seeded and has static API and internal state
 using Random = effolkronium::random_static;
 
