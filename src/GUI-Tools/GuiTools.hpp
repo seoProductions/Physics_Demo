@@ -1,12 +1,12 @@
 
-#ifndef PHYSICS_DEMO_GUITOOLS_H
-#define PHYSICS_DEMO_GUITOOLS_H
+#ifndef PHYSICS_DEMO_GUITOOLS_HPP
+#define PHYSICS_DEMO_GUITOOLS_HPP
 
 #include <imgui.h>
 #include <memory>
 
-#include "../DragHandler.h"
-#include "../WorldSpace.h"
+#include "../DragHandler.hpp"
+#include "../WorldSpace.hpp"
 #include "../Random/random.hpp"
 
 // credit : https://github.com/ilqvya/random
@@ -14,7 +14,11 @@
 using Random = effolkronium::random_static;
 
 
-
+////////////////////////////////////////////////////////////////
+////
+////  Class that implements all Gui functionality and logic
+////
+////////////////////////////////////////////////////////////////
 
 class GuiTools {
 public:
@@ -86,4 +90,4 @@ private:
 };
 
 
-#endif //PHYSICS_DEMO_GUITOOLS_H
+#endif //PHYSICS_DEMO_GUITOOLS_HPP

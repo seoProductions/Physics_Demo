@@ -1,5 +1,5 @@
-#include "GuiTools.h"
-#include "../GridSpace.h"
+#include "GuiTools.hpp"
+#include "../GridSpace.hpp"
 
 void GuiTools::GridStats() {
     ImGui::Begin("Grid Stats", &m_GridStats_active, ImGuiWindowFlags_AlwaysAutoResize);

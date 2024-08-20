@@ -1,10 +1,10 @@
-#include "WorldSpace.h"
-#include "DragHandler.h"
-#include "GridSpace.h"
-#include "GUI-Tools/GuiTools.h"
-#include "Time.h"
+#include "WorldSpace.hpp"
+#include "DragHandler.hpp"
+#include "GridSpace.hpp"
+#include "GUI-Tools/GuiTools.hpp"
+#include "Time.hpp"
 
-#include "ImGuiStyle.h"
+#include "ImGuiStyle.hpp"
 
 
 ////////////////////////////////////////////////////////////

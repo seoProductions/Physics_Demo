@@ -1,9 +1,9 @@
-#ifndef PHYSICS_DEMO_WORLDSPACE_H
-#define PHYSICS_DEMO_WORLDSPACE_H
+#ifndef PHYSICS_DEMO_WORLDSPACE_HPP
+#define PHYSICS_DEMO_WORLDSPACE_HPP
 
 #include <SFML/Graphics.hpp>
 #include <functional>
-#include "Entity/Entity.h"
+#include "Entity/Entity.hpp"
 #include "Random/random.hpp"
 
 // credit : https://github.com/ilqvya/random
@@ -65,4 +65,4 @@ private:
     bool        m_isActive;
 };
 
-#endif //PHYSICS_DEMO_WORLDSPACE_H
+#endif //PHYSICS_DEMO_WORLDSPACE_HPP

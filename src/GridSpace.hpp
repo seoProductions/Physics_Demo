@@ -1,13 +1,13 @@
 
-#ifndef PHYSICS_DEMO_GRIDSPACE_H
-#define PHYSICS_DEMO_GRIDSPACE_H
+#ifndef PHYSICS_DEMO_GRIDSPACE_HPP
+#define PHYSICS_DEMO_GRIDSPACE_HPP
 
 #include <SFML/Graphics.hpp>
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include <vector>
 
-#include "WorldSpace.h"
+#include "WorldSpace.hpp"
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ public:
 
     // game loop action
     static void init(WorldSpace*, sf::RenderWindow*);
-    static void updateGrid();
+    static void updateGrid();   // TODO FLIP Y AXIS
 
     // drawable containers
     static
@@ -127,4 +127,4 @@ private:
 };
 
 
-#endif //PHYSICS_DEMO_GRIDSPACE_H
+#endif //PHYSICS_DEMO_GRIDSPACE_HPP

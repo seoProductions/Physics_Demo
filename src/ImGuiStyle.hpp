@@ -1,6 +1,6 @@
 
-#ifndef PHYSICS_DEMO_IMGUISTYLE_H
-#define PHYSICS_DEMO_IMGUISTYLE_H
+#ifndef PHYSICS_DEMO_IMGUISTYLE_HPP
+#define PHYSICS_DEMO_IMGUISTYLE_HPP
 #include <imgui.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,4 +59,4 @@ void style()
     style.Colors[ImGuiCol_ModalWindowDimBg]      = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
-#endif //PHYSICS_DEMO_IMGUISTYLE_H
+#endif //PHYSICS_DEMO_IMGUISTYLE_HPP

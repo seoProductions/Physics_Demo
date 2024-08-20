@@ -32,6 +32,9 @@ public:
     static float& getDeltaTime()        { return delta_time;}
     static sf::Time& getSFMLTime()      { return sfml_time; }
 
+    // why not?
+    static inline float     scale      = 1;
+
     //returns delta time after updating
     static float& updateDeltaTime()   {
 
@@ -46,6 +49,8 @@ public:
             timer.restart();
             fps = truncf(1 / delta_time);
         }
+
+        delta_time *= scale;
         return delta_time;
     }
 };

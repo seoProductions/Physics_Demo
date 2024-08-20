@@ -1,11 +1,14 @@
-#ifndef PHYSICS_DEMO_ENTITY_H
-#define PHYSICS_DEMO_ENTITY_H
+#ifndef PHYSICS_DEMO_ENTITY_HPP
+#define PHYSICS_DEMO_ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <string>
 
-#include "RigidBody.h"
+// including Physics Attributes
+#include "Body.hpp"
+#include "KinematicBody.hpp"
+#include "RigidBody.hpp"
 
 struct Entity {
     std::string m_name;
@@ -20,10 +23,12 @@ struct Entity {
     ////
     ////////////////////////////////////////
 
-    std::shared_ptr<Body> m_RigidBody = nullptr;
+    std::shared_ptr<Body> m_body = nullptr;
+
+    //TODO
+    // rotational body
     // collidable
-    // rotatable
 };
 
 
-#endif //PHYSICS_DEMO_ENTITY_H
+#endif //PHYSICS_DEMO_ENTITY_HPP

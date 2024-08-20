@@ -1,5 +1,7 @@
-#include "WorldSpace.h"
+#include "WorldSpace.hpp"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++20-extensions"
 WorldSpace::WorldSpace(const std::string &name) {
     m_isActive  = false;
     m_isPaused  = true;
@@ -25,7 +27,7 @@ void WorldSpace::TogglePause() {
     m_isPaused = !m_isPaused;
 }
 
-#include "GUI-Tools/GuiTools.h"
+#include "GUI-Tools/GuiTools.hpp"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////
@@ -56,6 +58,12 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         Kinematics.m_entity_list.emplace_back(Entity());    // vector is given ownership of this Entity
         Entity& entity_ = Kinematics.m_entity_list.back();   // generate a reference to this entity, we will be setting it up
 
+        /////////////////////
+        ////
+        ////    INIT Shape
+        ////
+        /////////////////////
+
         switch (GuiTools::m_tool_shape) {
             case (GuiTools::rectangle):
                 entity_.m_shape = std::make_shared<sf::RectangleShape>(
@@ -77,28 +85,57 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
             default:
                 break;
         }
-        entity_.m_shape->setPosition(pos_);
+        // shape's position over-ridden by any existing [m_body]
+
         entity_.m_shape->setFillColor(sf::Color::Transparent);
         entity_.m_shape->setOutlineThickness(5.f);
         entity_.m_shape->setOutlineColor(sf::Color::Transparent);
         entity_.m_shape->setFillColor(
                 sf::Color(Random::get(100, 255), Random::get(100, 255), Random::get(100, 255)));
 
+        //////////////////////////////////
+        ////
+        ////    INIT Kinematic Attribute
+        ////
+        /////////////////////////////////
         // TODO INIT KINETAMIC PROPERTIES (ATTACHMENTS)
+        entity_.m_body = std::make_shared<KinematicBody>(pos_);
+
+        // Attach shape previously created. This will sync changes in the Transform
+        auto body = std::dynamic_pointer_cast<KinematicBody>(entity_.m_body);
+
+        if (!body) return;  // avoid nullptr
+        body->attachObject(entity_.m_shape);    // TODO typename pointer-cast?
+        body->setVelocity       ({ Random::get( -50.f, 50.f), Random::get( 50.f, 200.f )});
+        body->setAcceleration   ({ Random::get( -10.f, 10.f), Random::get( 0.f, 10.f )});
     };
     Kinematics.start = [&Kinematics]() {    if (!Kinematics.m_isActive) return;
-        // TODO SET DIFFERENT KINEMATIC STARTING VALUES
-        Kinematics.spawnEntity({ 0, 0 });
-        Kinematics.spawnEntity({ 0, 0 });
-        Kinematics.spawnEntity({ 0, 0 });
-
+        // TODO SET DIFFERENT KINEMATIC STARTING VALUES - mabye
+        Kinematics.spawnEntity({ -400.f, 0.f });
+        Kinematics.spawnEntity({ -300.f, 0.f });
+        Kinematics.spawnEntity({ -200.f, 0.f });
+        Kinematics.spawnEntity({ -100.f, 0.f });
+        Kinematics.spawnEntity({ 0.f, 0.f });
+        Kinematics.spawnEntity({ 100.f, 0.f });
+        Kinematics.spawnEntity({ 200.f, 0.f });
+        Kinematics.spawnEntity({ 300.f, 0.f });
+        Kinematics.spawnEntity({ 400.f, 0.f });
     };
     Kinematics.update = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
-        // TODO TEMPORARY TESTING ONLY
+
         for (const auto& entity : Kinematics.m_entity_list)
         {
-            if (entity.m_RigidBody)
-                entity.m_RigidBody->update();
+            if (!entity.m_body) continue;
+
+            // Default action
+            entity.m_body->update();
+
+            // Just to repeat the demo
+            if (std::static_pointer_cast<KinematicBody>(entity.m_body)->getPosition().y < -1000.f)
+            {
+                Kinematics.reset();
+                return;
+            }
         }
     };
     Kinematics.reset  = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
@@ -107,3 +144,5 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         Kinematics.start();
 };
 }
+
+#pragma clang diagnostic pop

@@ -27,22 +27,25 @@ FetchContent_Declare(ImGui-SFML
 FetchContent_MakeAvailable(ImGui-SFML)
 
 add_executable(Physics_Demo src/main.cpp
-        src/DragHandler.h
+        src/DragHandler.hpp
         src/DragHandler.cpp
-        src/WorldSpace.h
+        src/WorldSpace.hpp
         src/WorldSpace.cpp
-        src/GridSpace.h
+        src/GridSpace.hpp
         src/GridSpace.cpp
-        src/GUI-Tools/GuiTools.h
+        src/GUI-Tools/GuiTools.hpp
         src/GUI-Tools/GuiTools.cpp
         src/GUI-Tools/MouseStats.cpp
         src/GUI-Tools/WorldViewStats.cpp
         src/GUI-Tools/GridStats.cpp
-        src/Entity/Entity.h
-        src/Entity/RigidBody.h
+        src/Entity/Entity.hpp
+        src/Entity/RigidBody.hpp
         src/Entity/RigidBody.cpp
         src/GUI-Tools/TimeStats.cpp
-        src/Random/random.hpp)
+        src/Random/random.hpp
+        src/Entity/KinematicBody.cpp
+        src/Entity/KinematicBody.hpp
+        src/Entity/Body.hpp)
 
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)

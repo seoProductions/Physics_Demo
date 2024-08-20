@@ -3,7 +3,7 @@
 #include <imgui.h>
 #include <algorithm>
 
-#include "GridSpace.h"
+#include "GridSpace.hpp"
 
 void GridSpace::init(WorldSpace* world_, sf::RenderWindow* window_)
 {

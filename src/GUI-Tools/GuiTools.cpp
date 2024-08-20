@@ -1,4 +1,4 @@
-#include "GuiTools.h"
+#include "GuiTools.hpp"
 
 /////////////////////////////////////////
 ////
@@ -166,7 +166,7 @@ void GuiTools::Entity_Properties() {
     }
 
     // TODO TEMPORARY -> Show only 1 selected
-    if (!m_current_world->m_entity_list.empty()) {
+    /*if (!m_current_world->m_entity_list.empty()) {
         if (m_current_world->m_entity_list[0].m_RigidBody)
         {
             ImGui::SeparatorText("RigidBody-Properties");
@@ -184,7 +184,7 @@ void GuiTools::Entity_Properties() {
             ImGui::Text("momentum y: %f", body.getMomentum().y);
             ImGui::Text("mass: %f grams", body.getMass());
         }
-    }
+    }*/
 
 
     ImGui::End();
