@@ -35,11 +35,12 @@ int main()
                 WorldSpace("Sandbox FFA")
             };
 
-    WorldSpace::initBehavior(WorldSpaceList);   // pass reference
-
     // Demo will start on World 0
-    WorldSpace current_world = WorldSpaceList[0];
+    WorldSpace &current_world = WorldSpaceList[0];
     current_world.Activate();
+
+    // !!!DONT FORGET TO INIT!!!
+    WorldSpace::initBehavior(WorldSpaceList);   // pass reference
 
     // GUI TOOLS
     GuiTools::init(&window, &current_world, WorldSpaceList);

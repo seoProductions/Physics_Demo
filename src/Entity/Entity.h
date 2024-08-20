@@ -20,7 +20,7 @@ struct Entity {
     ////
     ////////////////////////////////////////
 
-    std::shared_ptr<RigidBody> m_RigidBody = nullptr;
+    std::shared_ptr<Body> m_RigidBody = nullptr;
     // collidable
     // rotatable
 };

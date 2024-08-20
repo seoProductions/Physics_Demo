@@ -84,7 +84,7 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         entity_.m_shape->setFillColor(
                 sf::Color(Random::get(100, 255), Random::get(100, 255), Random::get(100, 255)));
 
-        // TODO INIT KINETAMIC PROPERTIES
+        // TODO INIT KINETAMIC PROPERTIES (ATTACHMENTS)
     };
     Kinematics.start = [&Kinematics]() {    if (!Kinematics.m_isActive) return;
         // TODO SET DIFFERENT KINEMATIC STARTING VALUES
@@ -94,6 +94,12 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
 
     };
     Kinematics.update = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
+        // TODO TEMPORARY TESTING ONLY
+        for (const auto& entity : Kinematics.m_entity_list)
+        {
+            if (entity.m_RigidBody)
+                entity.m_RigidBody->update();
+        }
     };
     Kinematics.reset  = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
 

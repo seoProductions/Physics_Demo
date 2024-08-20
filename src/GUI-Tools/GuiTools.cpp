@@ -40,38 +40,38 @@ void GuiTools::updateGUI() {
         if (ImGui::Button(Kinematics.m_name.c_str()))
         {
             m_current_world->DeActivate();
-            m_current_world->paused();
+            m_current_world->Pause();
             m_current_world = &Kinematics;
             m_current_world->Activate();
-            m_current_world->paused();
+            m_current_world->Pause();
         }
 
         if (ImGui::Button(Forces.m_name.c_str()))
         {
 
             m_current_world->DeActivate();
-            m_current_world->paused();
+            m_current_world->Pause();
             m_current_world = &Forces;
             m_current_world->Activate();
-            m_current_world->paused();
+            m_current_world->Pause();
         }
 
         if (ImGui::Button(Torque.m_name.c_str()))
         {
             m_current_world->DeActivate();
-            m_current_world->paused();
+            m_current_world->Pause();
             m_current_world = &Torque;
             m_current_world->Activate();
-            m_current_world->paused();
+            m_current_world->Pause();
         }
 
         if (ImGui::Button(Sandbox.m_name.c_str()))
         {
             m_current_world->DeActivate();
-            m_current_world->paused();
+            m_current_world->Pause();
             m_current_world = &Sandbox;
             m_current_world->Activate();
-            m_current_world->paused();
+            m_current_world->Pause();
         }
 
         ImGui::TextColored(sf::Color(211,122,56, 250), "More");
