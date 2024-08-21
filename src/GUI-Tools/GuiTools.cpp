@@ -22,6 +22,8 @@
     m_GridStats_active  = false;
     m_TimeStats_active  = true;
 
+    m_enabled_world_delay = true;
+
 }
 
 
@@ -198,22 +200,13 @@ void GuiTools::World_Properties() {
         ImGui::EndMenuBar();
     }
 
-    ImGui::TextColored( ImColor(179, 200, 155),
+    ImGui::Text("world: %s: ", m_current_world->m_name.c_str());
+    ImGui::TextColored( ImColor(179, 200, 200),
                         "World is %s and %s", (m_current_world->active()) ? "ACTIVE": "NOT ACTIVE", (m_current_world->paused()) ? "PAUSED" : "RUNNING");
-    if (ImGui::SmallButton("Manual Pause/Unpause")) m_current_world->TogglePause();
-
+    if (ImGui::SmallButton("Pause/Unpause")) m_current_world->TogglePause();
+    if (ImGui::SmallButton("RESET")) m_current_world->reset();
     ImGui::LabelText("###Entity count" ," %zu total Entities", m_current_world->m_entity_list.size());
-    ImGui::Separator();
 
-    // TODO: Reset Button
-
-    //ImGui::ListBox()
-
-    // TODO make this selectable
-    for (auto& entity : m_current_world->m_entity_list)
-    {
-        ImGui::Text("%s" ,entity.m_name.c_str());
-    }
     ImGui::End();
 }
 

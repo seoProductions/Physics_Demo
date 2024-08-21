@@ -78,8 +78,9 @@ int main()
             // PAUSING
             if (ImGui::IsKeyPressed(ImGuiKey_Space)) current_world.TogglePause();
 
-            // HANDLE DRAGGING
-            DragHandler::updateDragging();
+            // HANDLE DRAGGING on condition
+            if (!ImGui::GetIO().WantCaptureMouse)   // FIXME: drags continue when hovering ImGui:: Window
+                DragHandler::updateDragging();
 
             //MOUSE SCROLLING
             //Credit to: https://github.com/SFML/SFML/wiki/Source:-Zoom-View-At-%28specified-pixel%29

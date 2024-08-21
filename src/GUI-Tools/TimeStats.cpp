@@ -1,6 +1,5 @@
 
 #include "GuiTools.hpp"
-#include "../Time.hpp"
 
 void GuiTools::TimeStats()
 {
@@ -9,11 +8,39 @@ void GuiTools::TimeStats()
     ImGui::Text(" %f ", Time::getDeltaTime());
     ImGui::SeparatorText("frames per second:");
     ImGui::Text(" %f ", Time::getFps());
-    ImGui::SeparatorText("more:");
+    ImGui::SetNextItemWidth(100);
+    ImGui::SliderFloat("fps delay: ", &Time::getFpsDelay(), 0.1, 1.f);
+
+    ImGui::Checkbox("world delay enabled", &m_enabled_world_delay);
+    if (m_enabled_world_delay)
+    {
+        ImGui::Text("delay: %f seconds", Time::getWorldDelay());
+        ImGui::SetNextItemWidth(100);
+        ImGui::SliderFloat("##world", &Time::getWorldDelay(), 1.f, 60.f);
+    }
+    // automatically invoke a reset
+    if (m_enabled_world_delay && Time::worldTimerUpdate()) m_current_world->reset();
+
+
+    ImGui::Checkbox("spawn delay enabled", &m_enabled_spawn_delay);
+    if (m_enabled_spawn_delay)
+    {
+        ImGui::Text("delay: %f seconds", Time::getSpawnDelay());
+        ImGui::SetNextItemWidth(100);
+        ImGui::SliderFloat("##spawn", &Time::getSpawnDelay(), 0.1f, 5.f);
+    }
+    // automatically spawn an Entity
+    if (m_enabled_spawn_delay && Time::spawnTimerUpdate())
+    {
+        // spawn at mouse cursor. Can be modified!
+        m_current_world->spawnEntity({ 0.f, 0.f });
+    }
+
+    ImGui::Text("speed: x%f", truncf(Time::scale));
     // just for fun lol
-    if (ImGui::Button("x1"))   Time::scale = 2.f;
+    if (ImGui::Button("x1"))   Time::scale = 1.f;
     if (ImGui::Button("x2"))   Time::scale = 2.f;
-    if (ImGui::Button("x5"))  Time::scale = 5.f;
+    if (ImGui::Button("x5"))  Time::scale  = 5.f;
 
     ImGui::End();
 }

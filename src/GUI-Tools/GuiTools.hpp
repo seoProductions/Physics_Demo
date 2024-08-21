@@ -78,6 +78,8 @@ private:
     static void GridStats();    // GridStats.cpp
 
     inline static bool m_TimeStats_active;
+    inline static bool m_enabled_world_delay;
+    inline static bool m_enabled_spawn_delay;
     static void TimeStats();    // TimeStats.cpp
 
     ////////////////////////

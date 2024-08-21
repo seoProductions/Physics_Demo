@@ -67,19 +67,19 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         switch (GuiTools::m_tool_shape) {
             case (GuiTools::rectangle):
                 entity_.m_shape = std::make_shared<sf::RectangleShape>(
-                        sf::Vector2f(Random::get(50.f, 200.f), Random::get(50.f, 200.f)));
+                        sf::Vector2f(Random::get(40.f, 80.f), Random::get(40.f, 80.f)));
                 entity_.m_name = "rectangle";
                 break;
             case (GuiTools::triangle):
-                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(50.f, 100.f), 3);
+                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(40.f, 80.f), 3);
                 entity_.m_name = "triangle";
                 break;
             case (GuiTools::pentagon):
-                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(50.f, 100.f), 5);
+                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(40.f, 80.f), 5);
                 entity_.m_name = "pentagon";
                 break;
             case (GuiTools::hexagon):
-                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(50.f, 100.f), 6);
+                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(40.f, 80.f), 6);
                 entity_.m_name = "hexagon";
                 break;
             default:
@@ -129,13 +129,6 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
 
             // Default action
             entity.m_body->update();
-
-            // Just to repeat the demo
-            if (std::static_pointer_cast<KinematicBody>(entity.m_body)->getPosition().y < -1000.f)
-            {
-                Kinematics.reset();
-                return;
-            }
         }
     };
     Kinematics.reset  = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
