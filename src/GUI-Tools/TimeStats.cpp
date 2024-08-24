@@ -30,7 +30,7 @@ void GuiTools::TimeStats()
         ImGui::SliderFloat("##spawn", &Time::getSpawnDelay(), 0.1f, 5.f);
     }
     // automatically spawn an Entity
-    if (m_enabled_spawn_delay && Time::spawnTimerUpdate())
+    if (m_enabled_spawn_delay && Time::spawnTimerUpdate() && !m_current_world->paused())
     {
         // spawn at mouse cursor. Can be modified!
         m_current_world->spawnEntity({ 0.f, 0.f });
@@ -38,9 +38,9 @@ void GuiTools::TimeStats()
 
     ImGui::Text("speed: x%f", truncf(Time::scale));
     // just for fun lol
-    if (ImGui::Button("x1"))   Time::scale = 1.f;
-    if (ImGui::Button("x2"))   Time::scale = 2.f;
-    if (ImGui::Button("x5"))  Time::scale  = 5.f;
+    if (ImGui::Button("x1"))    Time::scale = 1.f;
+    if (ImGui::Button("x2"))    Time::scale = 2.f;
+    if (ImGui::Button("x5"))    Time::scale = 5.f;
 
     ImGui::End();
 }

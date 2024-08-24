@@ -45,7 +45,9 @@ add_executable(Physics_Demo src/main.cpp
         src/Random/random.hpp
         src/Entity/KinematicBody.cpp
         src/Entity/KinematicBody.hpp
-        src/Entity/Body.hpp)
+        src/Entity/Body.hpp
+        src/Camera.cpp
+        src/Camera.hpp)
 
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)

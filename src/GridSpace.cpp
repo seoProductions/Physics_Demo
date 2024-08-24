@@ -34,7 +34,7 @@ void GridSpace::updateGrid() {
     m_lines_text.clear();
     m_debug_vector.clear();
 
-    const sf::View& view = m_current_world->m_worldview;
+    const sf::View& view = m_current_world->m_camera.getView();
 
     ///////////////////////
     ////
@@ -286,7 +286,7 @@ constexpr float GridSpace::clamp(float d, float min, float max) {
 ///////////////////////
 
 void GridSpace::clampPosToGrid(sf::Transformable* object ) {
-    const sf::View& view = m_current_world->m_worldview;
+    const sf::View& view = m_current_world->m_camera.getView();
 
     const int64_t left_edge_x   = view.getCenter().x - (view.getSize().x / 2);
     const int64_t right_edge_x  = view.getCenter().x + (view.getSize().x / 2);

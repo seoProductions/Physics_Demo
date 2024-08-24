@@ -5,6 +5,7 @@
 #include <functional>
 #include "Entity/Entity.hpp"
 #include "Random/random.hpp"
+#include "Camera.hpp"
 
 // credit : https://github.com/ilqvya/random
 // get base random alias which is auto seeded and has static API and internal state
@@ -19,8 +20,14 @@ using Random = effolkronium::random_static;
 
 class WorldSpace {
 public:
-    WorldSpace() = default;
     WorldSpace(const std::string& name);
+
+    // special constructors
+    WorldSpace()                    = delete;
+    WorldSpace(const WorldSpace&)   = delete;
+    WorldSpace(WorldSpace&&)        = delete;
+    WorldSpace& operator= (WorldSpace&&)    = delete;
+    WorldSpace& operator= (const WorldSpace& world_) = delete;   // copy assign
 
     //////////////////////
     ////
@@ -58,11 +65,11 @@ public:
     std::vector<Entity> m_entity_list;
 
     std::string m_name;
-    sf::View    m_worldview;
+    Camera      m_camera;
 private:
 
-    bool        m_isPaused;
-    bool        m_isActive;
+    bool        m_isPaused{};
+    bool        m_isActive{};
 };
 
 #endif //PHYSICS_DEMO_WORLDSPACE_HPP

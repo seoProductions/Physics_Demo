@@ -6,8 +6,21 @@ WorldSpace::WorldSpace(const std::string &name) {
     m_isActive  = false;
     m_isPaused  = true;
     m_name      = name;
-    m_worldview.setCenter(0.f,0.f);
+    m_camera.getView().setCenter( { 0.f, 0.f });
 }
+
+/*WorldSpace& WorldSpace::operator= (const WorldSpace& world_)   // copy assign
+{
+    this->m_name        = world_.m_name;
+    this->m_camera      = world_.m_camera;
+    this->m_isActive    = world_.m_isActive;
+    this->m_isPaused    = world_.m_isPaused;
+    this->spawnEntity   = world_.spawnEntity;
+    this->start         = world_.start;
+    this->reset         = world_.reset;
+    this->update        = world_.update;
+}*/
+
 
 [[maybe_unused]]
 void WorldSpace::UnPause()      { m_isPaused = false; }
@@ -135,7 +148,99 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
 
         Kinematics.m_entity_list.clear();
         Kinematics.start();
-};
+    };
+
+
+
+    ///////////////////////////////
+    ////
+    //// Forces World Behavior
+    ////
+    ///////////////////////////////
+
+    Forces.spawnEntity = [&Forces](const sf::Vector2f pos_) {   if (!Forces.m_isActive) return;
+
+        Forces.m_entity_list.emplace_back(Entity());    // vector is given ownership of this Entity
+        Entity& entity_ = Forces.m_entity_list.back();   // generate a reference to this entity, we will be setting it up
+
+        /////////////////////
+        ////
+        ////    INIT Shape
+        ////
+        /////////////////////
+
+        switch (GuiTools::m_tool_shape) {
+            case (GuiTools::rectangle):
+                entity_.m_shape = std::make_shared<sf::RectangleShape>(
+                        sf::Vector2f(Random::get(40.f, 80.f), Random::get(40.f, 80.f)));
+                entity_.m_name = "rectangle";
+                break;
+            case (GuiTools::triangle):
+                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(40.f, 80.f), 3);
+                entity_.m_name = "triangle";
+                break;
+            case (GuiTools::pentagon):
+                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(40.f, 80.f), 5);
+                entity_.m_name = "pentagon";
+                break;
+            case (GuiTools::hexagon):
+                entity_.m_shape = std::make_shared<sf::CircleShape>(Random::get(40.f, 80.f), 6);
+                entity_.m_name = "hexagon";
+                break;
+            default:
+                break;
+        }
+        // shape's position over-ridden by any existing [m_body]
+
+        entity_.m_shape->setFillColor(sf::Color::Transparent);
+        entity_.m_shape->setOutlineThickness(5.f);
+        entity_.m_shape->setOutlineColor(sf::Color::Transparent);
+        entity_.m_shape->setFillColor(
+                sf::Color(Random::get(100, 255), Random::get(100, 255), Random::get(100, 255)));
+
+        //////////////////////////////////
+        ////
+        ////    INIT Kinematic Attribute TODO
+        ////
+        /////////////////////////////////
+        // TODO INIT KINETAMIC PROPERTIES (ATTACHMENTS)
+        entity_.m_body = std::make_shared<KinematicBody>(pos_);
+
+        // Attach shape previously created. This will sync changes in the Transform
+        auto body = std::dynamic_pointer_cast<KinematicBody>(entity_.m_body);
+
+        if (!body) return;  // avoid nullptr
+        body->attachObject(entity_.m_shape);    // TODO typename pointer-cast?
+        body->setVelocity       ({ Random::get( -50.f, 50.f), Random::get( 50.f, 200.f )});
+        body->setAcceleration   ({ Random::get( -10.f, 10.f), Random::get( 0.f, 10.f )});
+    };
+    Forces.start = [&Forces]() {    if (!Forces.m_isActive) return;
+        // TODO SET DIFFERENT RIGID STARTING VALUES - mabye
+        Forces.spawnEntity({ -400.f, 0.f });
+        Forces.spawnEntity({ -300.f, 0.f });
+        Forces.spawnEntity({ -200.f, 0.f });
+        Forces.spawnEntity({ -100.f, 0.f });
+        Forces.spawnEntity({ 0.f, 0.f });
+        Forces.spawnEntity({ 100.f, 0.f });
+        Forces.spawnEntity({ 200.f, 0.f });
+        Forces.spawnEntity({ 300.f, 0.f });
+        Forces.spawnEntity({ 400.f, 0.f });
+    };
+    Forces.update = [&Forces]() {   if (!Forces.m_isActive) return;
+
+        for (const auto& entity : Forces.m_entity_list)
+        {
+            if (!entity.m_body) continue;
+
+            // Default action
+            entity.m_body->update();
+        }
+    };
+    Forces.reset  = [&Forces]() {   if (!Forces.m_isActive) return;
+
+        Forces.m_entity_list.clear();
+        Forces.start();
+    };
 }
 
 #pragma clang diagnostic pop

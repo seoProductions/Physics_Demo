@@ -6,11 +6,11 @@
 ////
 /////////////////////////////////////////
 
- void GuiTools::init(sf::RenderWindow* window_, WorldSpace* world_, std::array<WorldSpace, 4>& world_list_)
+ void GuiTools::init(sf::RenderWindow* window_, WorldSpace** world_, std::array<WorldSpace, 4>* const world_list_)
  {
     m_window = window_;
     m_world_list = world_list_;
-    m_current_world = world_;
+    m_current_world_source = world_;      // points to the same world in main.cpp
 
     m_Entity_Properties_active = false;
     m_World_Properties_active = true;
@@ -28,6 +28,8 @@
 
 
 void GuiTools::updateGUI() {
+    // retrieve current world from main.cpp
+    m_current_world = *m_current_world_source;
 
     ///////////////////////
     ////
@@ -35,25 +37,26 @@ void GuiTools::updateGUI() {
     ////
     ///////////////////////
 
+    // future me here: I ran into a ton of trouble getting the current_world here and from main.cpp synced up.
+    // I resorted to using iterators as means of avoiding copy construction and reference management.
     if (ImGui::BeginMainMenuBar())
     {
         // handy structured binding
-        auto& [Kinematics, Forces, Torque, Sandbox] = m_world_list;
+        auto& [Kinematics, Forces, Torque, Sandbox] = *m_world_list;
         if (ImGui::Button(Kinematics.m_name.c_str()))
         {
-            m_current_world->DeActivate();
+            m_current_world->Activate();
             m_current_world->Pause();
-            m_current_world = &Kinematics;
+            m_current_world = m_world_list->begin();     // update ptr
             m_current_world->Activate();
             m_current_world->Pause();
         }
 
         if (ImGui::Button(Forces.m_name.c_str()))
         {
-
             m_current_world->DeActivate();
             m_current_world->Pause();
-            m_current_world = &Forces;
+            m_current_world = m_world_list->begin() + 1;     // update ptr
             m_current_world->Activate();
             m_current_world->Pause();
         }
@@ -62,7 +65,7 @@ void GuiTools::updateGUI() {
         {
             m_current_world->DeActivate();
             m_current_world->Pause();
-            m_current_world = &Torque;
+            m_current_world = m_world_list->begin() + 2;       // update reference
             m_current_world->Activate();
             m_current_world->Pause();
         }
@@ -71,7 +74,7 @@ void GuiTools::updateGUI() {
         {
             m_current_world->DeActivate();
             m_current_world->Pause();
-            m_current_world = &Sandbox;
+            m_current_world = m_world_list->begin() + 3;       // update reference
             m_current_world->Activate();
             m_current_world->Pause();
         }

@@ -11,7 +11,7 @@ void GuiTools::ViewStats()
     ImGui::Begin("World View Stats", &m_ViewStats_active, ImGuiWindowFlags_AlwaysAutoResize);
 
     // helper variable
-    const sf::View& view = m_current_world->m_worldview;
+    const sf::View& view = m_current_world->m_camera.getView();
 
     ImGui::SeparatorText("SFML View");
     ImGui::Text("Centered at x: %f y: %f",view.getCenter().x,

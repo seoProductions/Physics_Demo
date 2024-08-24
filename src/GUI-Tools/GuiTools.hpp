@@ -22,7 +22,7 @@ using Random = effolkronium::random_static;
 
 class GuiTools {
 public:
-    static void init(sf::RenderWindow*, WorldSpace*, std::array<WorldSpace, 4>&);
+    static void init(sf::RenderWindow*, WorldSpace** ,std::array<WorldSpace, 4>* );
     static void updateGUI();        // invoked every frame
 
     // conditional windows
@@ -48,8 +48,8 @@ private:
     // main program variables - statically allocated
     inline static sf::RenderWindow* m_window;
     inline static WorldSpace*       m_current_world;
-    inline static
-    std::array<WorldSpace, 4>       m_world_list { };
+    inline static WorldSpace**      m_current_world_source;
+    inline static std::array<WorldSpace, 4>*      m_world_list;
 
     ////////////////
     ////
@@ -82,13 +82,6 @@ private:
     inline static bool m_enabled_spawn_delay;
     static void TimeStats();    // TimeStats.cpp
 
-    ////////////////////////
-    ////
-    ////    ToolBar Logic
-    ////
-    ////////////////////////
-
-    static void spawnEntity();
 };
 
 
