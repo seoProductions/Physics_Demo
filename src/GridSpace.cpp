@@ -48,8 +48,8 @@ void GridSpace::updateGrid() {
 
 
     // this value determines verticle line spacing
-    int base_10_divisible = get_base_10_divisible(view.getSize().x);
-    m_debug_vector.push_back(base_10_divisible);
+    int base_10_divisible = get_base_10_divisible(view.getSize().x / 2);    // take account half of world view
+    m_debug_vector.push_back(base_10_divisible); // FIXME: lines dont render outside of 1000
 
     int verticle_count =  (int)view.getSize().x /  base_10_divisible;
     m_debug_vector.push_back(verticle_count);
@@ -98,7 +98,7 @@ void GridSpace::updateGrid() {
     m_debug_vector.push_back(view_edge_y);
 
     // this value determines horizontal line spacing
-    base_10_divisible = get_base_10_divisible((long)view.getSize().y);
+    base_10_divisible = get_base_10_divisible((long)view.getSize().y / 2);    // take account half of world view
     m_debug_vector.push_back(base_10_divisible);
 
     int horizontal_count =  (int)view.getSize().y /  base_10_divisible;
@@ -157,7 +157,7 @@ void GridSpace::updateGrid() {
     m_debug_vector.push_back(view_edge_x);
 
     // this value determines horizontal line spacing
-    base_10_divisible = get_base_10_divisible((long)view.getSize().y / 10);
+    base_10_divisible = get_base_10_divisible((long)view.getSize().y / 20);    // take account half of a tenth of world view
     m_debug_vector.push_back(base_10_divisible);
 
     horizontal_count =  (int)view.getSize().y /  base_10_divisible;
@@ -183,7 +183,7 @@ void GridSpace::updateGrid() {
     m_debug_vector.push_back(view_edge_y);
 
     // this value determines verticle line spacing
-    base_10_divisible = get_base_10_divisible(view.getSize().x / 10);
+    base_10_divisible = get_base_10_divisible(view.getSize().x / 20);     // take account half of a tenth of world view
     m_debug_vector.push_back(base_10_divisible);
 
     verticle_count =  view.getSize().x /  base_10_divisible;
@@ -217,27 +217,6 @@ void GridSpace::updateGrid() {
 
     m_origin_verticle[0].position = { 0.f, view.getCenter().y - (view.getSize().y / 2.f) };
     m_origin_verticle[1].position = { 0.f, view.getCenter().y + (view.getSize().y / 2.f) };
-
-    if (m_font_available)
-    {
-        // Origin Coords 0
-
-        sf::Text text;
-        text.setFont(m_font);
-        text.setCharacterSize(40);
-        text.setLetterSpacing(1);
-        text.setFillColor(sf::Color(130, 206, 255, 180));
-        text.setString("0");
-
-        clampPosToGrid(&text);
-
-        const sf::View defaultView = m_main_window->getDefaultView();
-        text.setPosition(( m_main_window->mapPixelToCoords(
-                m_main_window->mapCoordsToPixel(text.getPosition()),
-                defaultView)));
-
-        m_lines_text.push_back(text);
-    }
 
     m_lines.push_back(m_origin_verticle);
     m_lines.push_back(m_origin_horizontal);

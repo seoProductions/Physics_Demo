@@ -11,6 +11,7 @@
     m_window = window_;
     m_world_list = world_list_;
     m_current_world_source = world_;      // points to the same world in main.cpp
+    m_current_world = *m_current_world_source;  // stores current world
 
     m_Entity_Properties_active = false;
     m_World_Properties_active = true;
@@ -28,8 +29,6 @@
 
 
 void GuiTools::updateGUI() {
-    // retrieve current world from main.cpp
-    m_current_world = *m_current_world_source;
 
     ///////////////////////
     ////
@@ -47,16 +46,17 @@ void GuiTools::updateGUI() {
         {
             m_current_world->Activate();
             m_current_world->Pause();
-            m_current_world = m_world_list->begin();     // update ptr
+            *m_current_world_source = m_world_list->begin();     // update ptr
+            m_current_world = *m_current_world_source;
             m_current_world->Activate();
             m_current_world->Pause();
         }
-
         if (ImGui::Button(Forces.m_name.c_str()))
         {
             m_current_world->DeActivate();
             m_current_world->Pause();
-            m_current_world = m_world_list->begin() + 1;     // update ptr
+            *m_current_world_source = m_world_list->begin() + 1;     // update ptr
+            m_current_world = *m_current_world_source;
             m_current_world->Activate();
             m_current_world->Pause();
         }
@@ -65,7 +65,8 @@ void GuiTools::updateGUI() {
         {
             m_current_world->DeActivate();
             m_current_world->Pause();
-            m_current_world = m_world_list->begin() + 2;       // update reference
+            *m_current_world_source = m_world_list->begin() + 2;     // update ptr
+            m_current_world = *m_current_world_source;
             m_current_world->Activate();
             m_current_world->Pause();
         }
@@ -74,7 +75,8 @@ void GuiTools::updateGUI() {
         {
             m_current_world->DeActivate();
             m_current_world->Pause();
-            m_current_world = m_world_list->begin() + 3;       // update reference
+            *m_current_world_source = m_world_list->begin() + 3;     // update ptr
+            m_current_world = *m_current_world_source;
             m_current_world->Activate();
             m_current_world->Pause();
         }
@@ -89,6 +91,7 @@ void GuiTools::updateGUI() {
 
         ImGui::EndMainMenuBar();
     }
+
 
 
     ///////////////////////
@@ -197,17 +200,17 @@ void GuiTools::Entity_Properties() {
 
 void GuiTools::World_Properties() {
     ImGui::Begin("World Properties", &m_Entity_Properties_active, ImGuiWindowFlags_AlwaysAutoResize);
-    if (ImGui::BeginMenuBar()) {    // TODO NOT WORKING FIX
-        ImGui::Button("Select");
-        ImGui::Button("Delete");
-        ImGui::EndMenuBar();
-    }
 
     ImGui::Text("world: %s: ", m_current_world->m_name.c_str());
     ImGui::TextColored( ImColor(179, 200, 200),
                         "World is %s and %s", (m_current_world->active()) ? "ACTIVE": "NOT ACTIVE", (m_current_world->paused()) ? "PAUSED" : "RUNNING");
     if (ImGui::SmallButton("Pause/Unpause")) m_current_world->TogglePause();
     if (ImGui::SmallButton("RESET")) m_current_world->reset();
+    if (ImGui::SmallButton("Back to Origin"))
+    {
+        m_current_world->m_camera.setCenterTarget   ( { 0.f, 0.f } );
+        m_current_world->m_camera.setSizeTarget     ( { 1'000.f, 1'000.f } );
+    }
     ImGui::LabelText("###Entity count" ," %zu total Entities", m_current_world->m_entity_list.size());
 
     ImGui::End();

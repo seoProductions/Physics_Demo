@@ -26,8 +26,8 @@ public:
     void updateCenter();
     void updateStatus(Status, bool&&);
 
-    void setCenterTarget(const sf::Vector2f& );
-    void setSizeTarget  (const sf::Vector2f& );
+    void setCenterTarget(const sf::Vector2f& );     // automatically update status
+    void setSizeTarget  (const sf::Vector2f& );     // automatically update status
     void moveCenterTarget(const sf::Vector2f& );    // move
     void moveSizeTarget  (float &&);                // shrink / grow
 
@@ -45,11 +45,11 @@ private:
     ////
     //////////////////////
 
-    const sf::Vector2f m_max_size { 10000.f, 10000.f };
-    const sf::Vector2f m_min_size { 10.f, 10.f };
+    const sf::Vector2f m_max_size { 10'000.f, 10'000.f };
+    const sf::Vector2f m_min_size { 100.f, 100.f };
 
-    const sf::Vector2f m_max_center { 10000.f, 10000.f };
-    const sf::Vector2f m_min_center { -10000.f, -10000.f };
+    const sf::Vector2f m_max_center { 10'000.f, 10'000.f };
+    const sf::Vector2f m_min_center { -10'000.f, -10'000.f };
 
     //////////////////////
     ////
@@ -61,7 +61,7 @@ private:
     //https://stackoverflow.com/questions/427477/fastest-way-to-clamp-a-real-fixed-floating-point-value
     static constexpr float clamp(float d, float min, float max);
 
-    bool m_is_updating_scale;
+    bool m_is_updating_center;
     bool m_is_updating_size;
 };
 

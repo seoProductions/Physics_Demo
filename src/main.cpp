@@ -98,11 +98,15 @@ int main()
                 const sf::Vector2f afterCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 const sf::Vector2f offsetCoords{ beforeCoord - afterCoord };
 
-                view.move(offsetCoords);
+                //view.move(offsetCoords);
+                //current_world->m_camera.moveCenterTarget( offsetCoords );
+                current_world->m_camera.setCenterTarget(
+                        -window.mapPixelToCoords(sf::Mouse::getPosition(window)));
                 window.setView(view);
 
                 // Update when current view changes
                 current_world->m_camera.updateStatus(Camera::Status::Size, true);
+                current_world->m_camera.updateStatus(Camera::Status::Center, true);
                 GridSpace::updateGrid();
             }
 
@@ -110,10 +114,10 @@ int main()
             if (DragHandler::isDragging() && !DragHandler::isSelecting())
             {
                 // messy world view translation :o TODO looking for fix - deltaPos bugs - UNSTABLE at LARGE COORDS
-                current_world->m_camera.getView().move(DragHandler::getDeltaPosLocal());
+                current_world->m_camera.moveCenterTarget( DragHandler::getDeltaPosLocal() );
 
                 // Update when current view changes
-                GridSpace::updateGrid();
+                current_world->m_camera.updateStatus(Camera::Status::Center, true);
             }
 
         }
@@ -121,37 +125,41 @@ int main()
         const float VIEW_SPEED = 500.f;   // scale factor
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
-            current_world->m_camera.getView().move({ current_world->m_camera.getView().getSize().x / VIEW_SPEED, 0.f });
+            current_world->m_camera.moveCenterTarget({ current_world->m_camera.getView().getSize().x / VIEW_SPEED, 0.f });
+
             // Update when current view changes
-            GridSpace::updateGrid();
+            current_world->m_camera.updateStatus(Camera::Status::Center, true);
         }
 
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            current_world->m_camera.getView().move({ -current_world->m_camera.getView().getSize().x / VIEW_SPEED, 0.f });
+            current_world->m_camera.moveCenterTarget({ -current_world->m_camera.getView().getSize().x / VIEW_SPEED, 0.f });
+
             // Update when current view changes
-            GridSpace::updateGrid();
+            current_world->m_camera.updateStatus(Camera::Status::Center, true);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            current_world->m_camera.getView().move({ 0.f, -current_world->m_camera.getView().getSize().y / VIEW_SPEED });
+            current_world->m_camera.moveCenterTarget({ 0.f, -current_world->m_camera.getView().getSize().y / VIEW_SPEED });
+
             // Update when current view changes
-            GridSpace::updateGrid();
+            current_world->m_camera.updateStatus(Camera::Status::Center, true);
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
-            current_world->m_camera.getView().move({ 0.f, current_world->m_camera.getView().getSize().y / VIEW_SPEED });
+            current_world->m_camera.moveCenterTarget({ 0.f, current_world->m_camera.getView().getSize().y / VIEW_SPEED });
+
             // Update when current view changes
-            GridSpace::updateGrid();
+            current_world->m_camera.updateStatus(Camera::Status::Center, true);
         }
+
+        //// Dont Forget To update
+        //// Dont Forget To update
+        //// Dont Forget To update
 
         // UPDATE CAMERA
         current_world->m_camera.updateSize();
         current_world->m_camera.updateCenter();
-
-        //// Dont Forget To update
-        //// Dont Forget To update
-        //// Dont Forget To update
 
         // call to UNIQUE world update() on condition
         if (!current_world->paused())
