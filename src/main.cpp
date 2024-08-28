@@ -4,6 +4,7 @@
 #include "GUI-Tools/GuiTools.hpp"
 #include "Time.hpp"
 #include "Camera.hpp"
+#include "ArrowShape.hpp"
 
 #include "ImGuiStyle.hpp"
 
@@ -94,16 +95,12 @@ int main()
                 float zoom = (event.mouseWheelScroll.delta < 0) ? 50 : -50;
                 current_world->m_camera.moveSizeTarget( std::move(zoom) );
 
-                window.setView(view);
                 const sf::Vector2f afterCoord = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 const sf::Vector2f offsetCoords{ beforeCoord - afterCoord };
 
-                //view.move(offsetCoords);
-                //current_world->m_camera.moveCenterTarget( offsetCoords );
-                current_world->m_camera.setCenterTarget(
-                        -window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+                // TODO: FIX ZOOM AT MOUSE
+                view.move(offsetCoords);
                 window.setView(view);
-
                 // Update when current view changes
                 current_world->m_camera.updateStatus(Camera::Status::Size, true);
                 current_world->m_camera.updateStatus(Camera::Status::Center, true);
@@ -190,6 +187,12 @@ int main()
         //RENDER DRAGGED RECTANGLE - on condition
         if (DragHandler::isSelecting())
             window.draw(DragHandler::getDraggedRectangle());
+
+        //FIXME: Temporary
+        sf::Vector2f v ( 55.f, 110.f);
+        ArrowShape arrow( v );
+        arrow.setPosition( { 0.f, 0.f });
+        window.draw(arrow);
 
         // RENDER GRIDSPACE TEXT
         // on default view - preserves SFML text scaling
