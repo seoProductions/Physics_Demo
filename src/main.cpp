@@ -181,18 +181,15 @@ int main()
         //RENDER SFML ENTITY ( shapes )
         for (const auto& entity: current_world->m_entity_list)
         {
-            window.draw(*entity.m_shape);
+            window.draw(*entity.m_shape);   // FIXME: create cast's for each body type
+            window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_velocity.value());
+            window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_acceleration.value());
         }
 
         //RENDER DRAGGED RECTANGLE - on condition
         if (DragHandler::isSelecting())
             window.draw(DragHandler::getDraggedRectangle());
 
-        //FIXME: Temporary
-        sf::Vector2f v ( 55.f, 110.f);
-        ArrowShape arrow( v );
-        arrow.setPosition( { 0.f, 0.f });
-        window.draw(arrow);
 
         // RENDER GRIDSPACE TEXT
         // on default view - preserves SFML text scaling

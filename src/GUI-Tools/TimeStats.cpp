@@ -7,7 +7,7 @@ void GuiTools::TimeStats()
     ImGui::SeparatorText("delta time:");
     ImGui::Text(" %f ", Time::getDeltaTime());
     ImGui::SeparatorText("frames per second:");
-    // green fps - good/ red - bad
+    // Color:  red - low fps,  green - fast fps.
     ImGui::TextColored(ImColor( std::clamp(255 - (2 * Time::getFps()), 0.f, 255.f),
                                 std::clamp( 2 * Time::getFps(), 0.f, 255.f),     0.f), " %f", Time::getFps());
     ImGui::SetNextItemWidth(100);

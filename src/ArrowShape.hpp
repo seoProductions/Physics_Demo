@@ -7,7 +7,6 @@
 class ArrowShape : public sf::Drawable, public sf::Transformable {
 public:
     explicit ArrowShape(sf::Vector2f&);
-    explicit ArrowShape(float, float);
 
     void update();
 
@@ -15,9 +14,9 @@ public:
 
 private:
 
-    sf::VertexArray m_quad_vertices { sf::Quads, 4};
-    sf::VertexArray m_tri_vertices  { sf::Triangles, 3};
-    sf::Vector2f&   m_vector;
+    sf::VertexArray m_tri_base  { sf::Triangles, 3 };
+    sf::VertexArray m_tri_head  { sf::Triangles, 3 };
+    sf::Vector2f&   m_vector;       // reference to the vector' it visualizes
 };
 
 

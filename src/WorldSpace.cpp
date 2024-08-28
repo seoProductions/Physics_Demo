@@ -100,13 +100,13 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         }
         // shape's position over-ridden by any existing [m_body]
 
-        entity_.m_shape->setFillColor(sf::Color::Transparent);
         entity_.m_shape->setOutlineThickness(5.f);
         entity_.m_shape->setOutlineColor(sf::Color::Transparent);
-        entity_.m_shape->setOrigin(entity_.m_shape->getLocalBounds().height / 2,
-                                   entity_.m_shape->getLocalBounds().width / 2);
+        entity_.m_shape->setOrigin(entity_.m_shape->getGlobalBounds().height / 2,
+                                   entity_.m_shape->getGlobalBounds().width / 2);
         entity_.m_shape->setFillColor(
-                sf::Color(Random::get(100, 255), Random::get(100, 255), Random::get(100, 255)));
+                Random::get({ sf::Color::Red, sf::Color::Blue, sf::Color::Green, sf::Color::White, sf::Color::Cyan })
+        );
 
         //////////////////////////////////
         ////

@@ -4,7 +4,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <optional>
 #include "Body.hpp"
+#include "../ArrowShape.hpp"
 #include "../Time.hpp"
 
 
@@ -22,6 +24,10 @@ public:
     KinematicBody(const sf::Vector2f& pos);
 
     void update() override;
+
+    // Vector Visualizer's
+    std::optional<ArrowShape>   m_arrow_velocity;
+    std::optional<ArrowShape>   m_arrow_acceleration;
 
     // getters setters
     sf::Vector2f &getPosition();

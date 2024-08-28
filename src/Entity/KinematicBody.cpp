@@ -4,12 +4,18 @@
 KinematicBody::KinematicBody(float x, float y) {
     m_position.x = x;
     m_position.y = y;
+
+    // set up vector visualizers
+    // FIXME: DEFAULT every vector visualizer is enabled
+    // FIXME: implement optional "show vector"
+    m_arrow_velocity     = std::nullopt;
+    m_arrow_acceleration = std::nullopt;
+
+    m_arrow_velocity.emplace(ArrowShape(m_velocity));
+    m_arrow_acceleration.emplace(ArrowShape(m_acceleration));
 }
 
-KinematicBody::KinematicBody(const sf::Vector2f& pos)
-{
-    m_position = pos;
-}
+KinematicBody::KinematicBody(const sf::Vector2f& pos) : KinematicBody(pos.x, pos.y) { }
 
 void KinematicBody::update() {
     // update vectors
@@ -21,6 +27,14 @@ void KinematicBody::update() {
     // update attached object
     m_attached_obj->setPosition(m_position.x,
                                 -m_position.y);     // transformable object will have flipped y-axis (negative down)
+
+    // update vector visualizers
+    m_arrow_velocity->update();
+    m_arrow_velocity->setPosition(m_position.x,
+                                  -m_position.y);
+    m_arrow_acceleration->setPosition(m_position.x,
+                                      -m_position.y);
+    m_arrow_acceleration->update();
 }
 
 // TODO Bug?
