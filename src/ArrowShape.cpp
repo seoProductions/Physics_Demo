@@ -22,8 +22,8 @@ void ArrowShape::update() {
 
     // Color:  red - longer arrow,  blue - shorter arrow.
     const auto magnitude = std::hypotf(m_vector.x, m_vector.y); // find hypotenuse
-    const sf::Color color = sf::Color( 0.f,   std::clamp( 10 * sqrt(magnitude), 0.f, 255.f),
-                         std::clamp(255 - (10 * sqrt(magnitude)), 0.f, 255.f), 215.f );
+    const sf::Color color = sf::Color( 0.f,   std::clamp( magnitude, 0.f, 255.f),
+                                            std::clamp(255 - magnitude, 0.f, 255.f), 215.f );
 
     m_tri_base[0].color = color;
     m_tri_base[1].color = color;
@@ -37,7 +37,7 @@ void ArrowShape::update() {
     constexpr float TO_DEGREES = 57.2957804;
     setRotation( -1 * TO_DEGREES * std::atan( m_vector.y / m_vector.x ));
 
-    setScale( { 15 + m_vector.x, m_vector.y / 10} );  // just visuals
+    setScale( { 15 + m_vector.x * 2, std::clamp(fabsf(m_vector.y) / 10, 0.f, 20.f) } );  // just visuals
 }
 
  // MANDATORY by SFML
