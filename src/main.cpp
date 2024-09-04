@@ -3,7 +3,6 @@
 #include "GridSpace.hpp"
 #include "GUI-Tools/GuiTools.hpp"
 #include "Time.hpp"
-#include "Camera.hpp"
 #include "ArrowShape.hpp"
 
 #include "ImGuiStyle.hpp"
@@ -16,7 +15,7 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
 
-    auto window = sf::RenderWindow{ { 1920u, 1080u }, "Cmake with SFML with Dear IMGUI Demo!", sf::Style::Default, settings };
+    auto window = sf::RenderWindow{ { 1920u, 1080u }, "Physics!", sf::Style::Default, settings };
     window.setFramerateLimit(144);
 
     // Combine with Im-Gui
@@ -51,10 +50,12 @@ int main()
 
     // GRID SPACE
     GridSpace::init(current_world, &window);
-    GridSpace::updateGrid();
 
     // Set-up World 0
     current_world->start();
+
+    window.setView(current_world->m_camera.getView());
+    GridSpace::updateGrid();
 
     while (window.isOpen())
     {
@@ -101,9 +102,8 @@ int main()
                 // TODO: FIX ZOOM AT MOUSE
                 view.move(offsetCoords);
                 window.setView(view);
+
                 // Update when current view changes
-                current_world->m_camera.updateStatus(Camera::Status::Size, true);
-                current_world->m_camera.updateStatus(Camera::Status::Center, true);
                 GridSpace::updateGrid();
             }
 
@@ -112,43 +112,23 @@ int main()
             {
                 // messy world view translation :o TODO looking for fix - deltaPos bugs - UNSTABLE at LARGE COORDS
                 current_world->m_camera.moveCenterTarget( DragHandler::getDeltaPosLocal() );
-
-                // Update when current view changes
-                current_world->m_camera.updateStatus(Camera::Status::Center, true);
             }
 
         }
-
+        // Keyboard listener's
         const float VIEW_SPEED = 500.f;   // scale factor
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
             current_world->m_camera.moveCenterTarget({ current_world->m_camera.getView().getSize().x / VIEW_SPEED, 0.f });
 
-            // Update when current view changes
-            current_world->m_camera.updateStatus(Camera::Status::Center, true);
-        }
-
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
             current_world->m_camera.moveCenterTarget({ -current_world->m_camera.getView().getSize().x / VIEW_SPEED, 0.f });
 
-            // Update when current view changes
-            current_world->m_camera.updateStatus(Camera::Status::Center, true);
-        }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
             current_world->m_camera.moveCenterTarget({ 0.f, -current_world->m_camera.getView().getSize().y / VIEW_SPEED });
 
-            // Update when current view changes
-            current_world->m_camera.updateStatus(Camera::Status::Center, true);
-        }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
             current_world->m_camera.moveCenterTarget({ 0.f, current_world->m_camera.getView().getSize().y / VIEW_SPEED });
-
-            // Update when current view changes
-            current_world->m_camera.updateStatus(Camera::Status::Center, true);
-        }
 
         //// Dont Forget To update
         //// Dont Forget To update
@@ -181,9 +161,10 @@ int main()
         //RENDER SFML ENTITY ( shapes )
         for (const auto& entity: current_world->m_entity_list)
         {
-            window.draw(*entity.m_shape);   // FIXME: create cast's for each body type
             window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_velocity.value());
             window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_acceleration.value());
+            window.draw(*entity.m_shape);   // FIXME: create cast's for each body type
+
         }
 
         //RENDER DRAGGED RECTANGLE - on condition

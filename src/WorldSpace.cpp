@@ -100,13 +100,13 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         }
         // shape's position over-ridden by any existing [m_body]
 
-        entity_.m_shape->setOutlineThickness(5.f);
-        entity_.m_shape->setOutlineColor(sf::Color::Transparent);
-        entity_.m_shape->setOrigin(entity_.m_shape->getGlobalBounds().height / 2,
-                                   entity_.m_shape->getGlobalBounds().width / 2);
-        entity_.m_shape->setFillColor(
-                Random::get({ sf::Color::Red, sf::Color::Blue, sf::Color::Green, sf::Color::White, sf::Color::Cyan })
+        entity_.m_shape->setOutlineThickness(1.f);
+        entity_.m_shape->setOutlineColor(
+                Random::get({ sf::Color::Yellow, sf::Color::Cyan })
         );
+        entity_.m_shape->setOrigin(entity_.m_shape->getLocalBounds().height / 2,
+                                   entity_.m_shape->getLocalBounds().width / 2);
+        entity_.m_shape->setFillColor( sf::Color( 255.f, 255.f, 255.f ));  // grey
 
         //////////////////////////////////
         ////
@@ -123,6 +123,7 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         body->attachObject(entity_.m_shape);    // TODO typename pointer-cast?
         body->setVelocity       ({ Random::get( -50.f, 50.f), Random::get( 50.f, 200.f )});
         body->setAcceleration   ({ Random::get( -10.f, 10.f), Random::get( 0.f, 10.f )});
+        body->update();
     };
     Kinematics.start = [&Kinematics]() {    if (!Kinematics.m_isActive) return;
         // TODO SET DIFFERENT KINEMATIC STARTING VALUES - mabye

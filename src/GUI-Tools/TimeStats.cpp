@@ -29,7 +29,7 @@ void GuiTools::TimeStats()
     {
         ImGui::Text("delay: %f seconds", Time::getSpawnDelay());
         ImGui::SetNextItemWidth(100);
-        ImGui::SliderFloat("##spawn", &Time::getSpawnDelay(), 0.1f, 5.f);
+        ImGui::SliderFloat("##spawn", &Time::getSpawnDelay(), 0.025f, 1.f);
     }
     // automatically spawn an Entity
     if (m_enabled_spawn_delay && Time::spawnTimerUpdate() && !m_current_world->paused())

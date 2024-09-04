@@ -14,16 +14,16 @@
     m_current_world = *m_current_world_source;  // stores current world
 
     m_Entity_Properties_active = false;
-    m_World_Properties_active = true;
+    m_World_Properties_active = false;
     m_Settings_active   = false;
     m_DevTools_active   = false;
 
     m_MouseStats_active = false;
     m_ViewStats_active  = false;
     m_GridStats_active  = false;
-    m_TimeStats_active  = true;
+    m_TimeStats_active  = false;
 
-    m_enabled_world_delay = true;
+    m_enabled_world_delay = false;
 
 }
 

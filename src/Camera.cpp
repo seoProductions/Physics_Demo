@@ -89,23 +89,16 @@ sf::View & Camera::getView() {
 
 void Camera::moveCenterTarget(const sf::Vector2f & center_) {
     m_target_center += center_;
+    m_is_updating_center = true;
 }
 
 void Camera::moveSizeTarget(float&& size_) {
     m_target_size += { size_, size_ };
+    m_is_updating_size = true;
 }
 
 inline
 constexpr float Camera::clamp(float d, float min, float max) {
     const float t = d < min ? min : d;
     return t > max ? max : t;
-}
-
-void Camera::updateStatus(Status s_, bool&& b_) {
-    switch (s_) {
-        case Status::Size:
-            m_is_updating_size  = b_;
-        case Status::Center:
-            m_is_updating_center = b_;
-    }
 }

@@ -15,16 +15,9 @@ class Camera {
 public:
     Camera();
 
-    enum struct Status
-   {
-        Size,
-        Center
-    };
-
-
+    // invoked at every frame
     void updateSize();
     void updateCenter();
-    void updateStatus(Status, bool&&);
 
     void setCenterTarget(const sf::Vector2f& );     // automatically update status
     void setSizeTarget  (const sf::Vector2f& );     // automatically update status

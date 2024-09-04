@@ -14,9 +14,10 @@ public:
 
 private:
 
-    sf::VertexArray m_tri_base  { sf::Triangles, 3 };
-    sf::VertexArray m_tri_head  { sf::Triangles, 3 };
-    sf::Vector2f&   m_vector;       // reference to the vector' it visualizes
+    sf::VertexArray m__base      { sf::Quads, 4 };
+    sf::VertexArray m__head_1    { sf::Quads, 4 };
+    sf::VertexArray m__head_2    { sf::Quads, 4 };
+    sf::Vector2f&   m_vector;       // reference to the vector it visualizes
 };
 
 
