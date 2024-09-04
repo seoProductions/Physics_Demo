@@ -53,7 +53,8 @@ add_executable(Physics_Demo src/main.cpp
 
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)
-target_compile_features(Physics_Demo PRIVATE cxx_std_17)
+target_compile_features(Physics_Demo PRIVATE cxx_std_20)
+target_compile_options(Physics_Demo PRIVATE -O3)
 
 if(WIN32)
     add_custom_command(
