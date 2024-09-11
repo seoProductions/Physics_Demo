@@ -49,7 +49,9 @@ add_executable(Physics_Demo src/main.cpp
         src/Camera.cpp
         src/Camera.hpp
         src/ArrowShape.cpp
-        src/ArrowShape.hpp)
+        src/ArrowShape.hpp
+        src/CollisionHandler.cpp
+        src/CollisionHandler.hpp)
 
 
 target_link_libraries(Physics_Demo     PRIVATE sfml-graphics ImGui-SFML::ImGui-SFML)

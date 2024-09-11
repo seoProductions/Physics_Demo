@@ -138,7 +138,7 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         Kinematics.spawnEntity({ 400.f, 0.f });
     };
     Kinematics.update = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
-
+        // update physics for each entity
         for (const auto& entity : Kinematics.m_entity_list)
         {
             if (!entity.m_body) continue;
@@ -146,6 +146,18 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
             // Default action
             entity.m_body->update();
         }
+
+
+        // check if selected
+        if (!DragHandler::isDragging()) return;
+
+        const auto selector = DragHandler::getDraggedRectangle();
+        for (auto& entity : Kinematics.m_entity_list)
+        {
+            if (CollisionHandler::isColliding( selector, *entity.m_shape))
+                entity.m_shape->setFillColor(sf::Color::Red); // JUST A TEST TODO
+        }
+
     };
     Kinematics.reset  = [&Kinematics]() {   if (!Kinematics.m_isActive) return;
 

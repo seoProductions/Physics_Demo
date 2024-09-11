@@ -6,6 +6,7 @@
 #include "Entity/Entity.hpp"
 #include "Random/random.hpp"
 #include "Camera.hpp"
+#include "CollisionHandler.hpp"
 
 // credit : https://github.com/ilqvya/random
 // get base random alias which is auto seeded and has static API and internal state

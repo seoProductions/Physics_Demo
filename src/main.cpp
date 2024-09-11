@@ -3,7 +3,7 @@
 #include "GridSpace.hpp"
 #include "GUI-Tools/GuiTools.hpp"
 #include "Time.hpp"
-#include "ArrowShape.hpp"
+#include "CollisionHandler.hpp"
 
 #include "ImGuiStyle.hpp"
 
@@ -80,6 +80,8 @@ int main()
             }
             // PAUSING
             if (ImGui::IsKeyPressed(ImGuiKey_Space)) current_world->TogglePause();
+            // RESET
+            if (ImGui::IsKeyPressed(ImGuiKey_R)) current_world->reset();
 
             // HANDLE DRAGGING on condition
             if (!ImGui::GetIO().WantCaptureMouse)
@@ -161,10 +163,9 @@ int main()
         //RENDER SFML ENTITY ( shapes )
         for (const auto& entity: current_world->m_entity_list)
         {
-            window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_velocity.value());
-            window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_acceleration.value());
+            //window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_velocity.value());
+            //window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_acceleration.value());
             window.draw(*entity.m_shape);   // FIXME: create cast's for each body type
-
         }
 
         //RENDER DRAGGED RECTANGLE - on condition
@@ -187,3 +188,17 @@ int main()
     ImGui::SFML::Shutdown();
     return EXIT_SUCCESS;
 }
+/*Draw local bounds
+ * //RENDER SFML ENTITY ( shapes )
+        for (const auto& entity: current_world->m_entity_list)
+        {
+            //window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_velocity.value());
+            //window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_acceleration.value());
+            window.draw(*entity.m_shape);   // FIXME: create cast's for each body type
+            sf::RectangleShape a(sf::Vector2f(entity.m_shape->getLocalBounds().width,
+                                            entity.m_shape->getLocalBounds().height));
+            a.setPosition(entity.m_shape->getPosition());
+            a.setFillColor(sf::Color(200,200,200,50));
+            a.setOrigin(entity.m_shape->getOrigin());
+            window.draw(a);
+        }*/

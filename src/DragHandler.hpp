@@ -43,7 +43,7 @@ public:
 
 private:
     inline static sf::RectangleShape m_draggedRect = sf::RectangleShape(sf::Vector2f (0.f, 0.f));
-    inline static sf::Vector2i      m_orig_Pos;
+    inline static sf::Vector2i       m_orig_Pos;
     inline static sf::Vector2i       m_prev_Pos;
     inline static sf::Vector2i       m_deltaPos;
     inline static sf::Vector2i       m_deltaPos_total;
