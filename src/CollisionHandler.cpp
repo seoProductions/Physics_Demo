@@ -2,28 +2,31 @@
 #include "CollisionHandler.hpp"
 
 bool CollisionHandler::isColliding(const sf::Shape &s1_, const sf::Shape &s2_) {
-
+    // helper vectors
     std::stack<sf::Vector2f> normalVectors;
     sf::Vector2f normal;
+    sf::Vector2f edge;
 
     // push normal vector for each edge of shape1
-    for (int i = 0; i < s1_.getPointCount(); i++)
+    for (int i = 0; i < s1_.getPointCount() - 1; i++)
     {
-        normal = { -s1_.getPoint(i).x, s1_.getPoint(i).x };
+        edge = s1_.getPoint(i + 1) - s1_.getPoint(i);
+        normal = { -edge.x, edge.y };
         normalVectors.push( std::move(normal) );
     }
 
     // push normal vector for each edge of shape2
-    for (int i = 0; i < s2_.getPointCount(); i++)
+    for (int i = 0; i < s2_.getPointCount() - 1; i++)
     {
-        normal = { -s2_.getPoint(i).x, s2_.getPoint(i).x };
-        normal.x *= 1;
+        edge = s2_.getPoint(i + 1) - s2_.getPoint(i);
+        normal = { -edge.x, edge.y };
         normalVectors.push( std::move(normal) );
     }
 
-    // create min axis TODO
-    float s1min, s2min = std::numeric_limits<float>::max();
-    float s1max, s2max = std::numeric_limits<float>::min();
+    float s1min = std::numeric_limits<float>::max();
+    float s2min = std::numeric_limits<float>::max();
+    float s1max = std::numeric_limits<float>::min();
+    float s2max = std::numeric_limits<float>::min();
     sf::Vector2f axis;
 
     // iterate through all normal vectors. use SAT and if separation axis is found, return false
@@ -63,6 +66,7 @@ bool CollisionHandler::isColliding(const sf::Shape &s1_, const sf::Shape &s2_) {
     return true;
 }
 
+// FIXME: BROKEN!
 std::optional<sf::Vector2f> CollisionHandler::isCollidingMTV(const sf::Shape &s1_, const sf::Shape &s2_) {
 
     std::stack<sf::Vector2f> normalVectors;
