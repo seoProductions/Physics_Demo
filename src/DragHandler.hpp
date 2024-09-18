@@ -38,7 +38,6 @@ public:
     // will reset once dragging is re-invoked
     static const sf::Vector2i&       getDeltaPos ();
     static const sf::Vector2i&       getDeltaTotalPos();
-    static const sf::Vector2i&       getOriginPos();
     static const sf::Vector2f        getDeltaPosLocal();
 
 private:
@@ -54,6 +53,10 @@ private:
     // main program variables - statically allocated
     inline static sf::RenderWindow*    m_window;
     inline static sf::Event*           m_event;
+
+    // flag if vector's have been reset. This is to avoid re-setting at every frame
+    inline static bool m_needs_reset;
+    static void resetVectors();
 };
 
 

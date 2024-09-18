@@ -14,9 +14,8 @@ void DragHandler::init(sf::RenderWindow* window_, sf::Event* event_) {
     m_dragging  = false;
     m_selecting = false;
 
-    // vectors
-    m_deltaPos_total = { 0, 0 };
-    m_deltaPos       = { 0, 0 };
+    m_needs_reset = false;
+    resetVectors();
 
     // rectangle
     m_draggedRect.setFillColor(sf::Color(150,200,210, 180));    // light blue
@@ -31,10 +30,11 @@ void DragHandler::updateDragging()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))  m_selecting = false;
     else
     {
-        m_dragging  = false;
-        m_selecting = false;
+        if (m_needs_reset) resetVectors();
         return;
     }
+    // Mouse has been engaged. Proceed to logic
+    m_needs_reset = true;
 
     // obtain mouse pos
     const sf::Vector2i current_mouse =  static_cast<sf::Vector2i>(
@@ -93,9 +93,6 @@ bool DragHandler::isDragging() {
     return m_dragging;
 }
 
-const sf::Vector2i &DragHandler::getOriginPos() {
-    return m_orig_Pos;
-}
 
 const sf::Vector2i &DragHandler::getDeltaTotalPos() {
     return m_deltaPos_total;
@@ -110,6 +107,16 @@ const sf::Vector2f DragHandler::getDeltaPosLocal() {
     return -static_cast<sf::Vector2f>(
             m_window->mapCoordsToPixel(
             m_window->mapPixelToCoords(DragHandler::getDeltaPos())));
+}
+
+void DragHandler::resetVectors() {
+    m_needs_reset = false;
+    m_dragging  = false;
+    m_selecting = false;
+    m_draggedRect.setSize( sf::Vector2f ( 0, 0 ));
+    m_prev_Pos          = { 0, 0 };
+    m_deltaPos          = { 0, 0 };
+    m_deltaPos_total    = { 0, 0 };
 }
 
 
