@@ -153,7 +153,7 @@ int main()
         ////
         ////////////////
 
-        window.clear();
+        window.clear(sf::Color(22, 27, 28));
 
         //RENDER GRIDSPACE
         for (const auto& lines: GridSpace::getGridLines())
