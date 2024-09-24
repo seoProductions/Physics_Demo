@@ -19,8 +19,8 @@ class CollisionHandler {
 public:
     // returns true if colliding.
     [[nodiscard]] static bool isColliding(
-            const sf::Shape&,
-            const sf::Shape&);
+            const sf::Shape*,
+            const sf::Shape*);
 
     // returns Minimum Translation Vector (MTV) if the 2 shapes collide.
     [[nodiscard]] static std::optional<sf::Vector2f> isCollidingMTV(

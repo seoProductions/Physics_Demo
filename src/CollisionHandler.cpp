@@ -1,30 +1,30 @@
 
 #include "CollisionHandler.hpp"
 
-bool CollisionHandler::isColliding(const sf::Shape &s1_, const sf::Shape &s2_) {
+bool CollisionHandler::isColliding(const sf::Shape* s1_, const sf::Shape* s2_) {
     // helper vectors
     std::vector<sf::Vector2f> normalVectors;
     sf::Vector2f temp;
     sf::Vector2f edge;
 
     // push normal vector for each edge of shape1
-    for (int i = 0; i < s1_.getPointCount() - 1; i++)
+    for (int i = 0; i < s1_->getPointCount() - 1; i++)
     {
-        edge = s1_.getPoint(i + 1) - s1_.getPoint(i);
+        edge = s1_->getPoint(i + 1) - s1_->getPoint(i);
         // normalize the normal
-        temp = { edge.x, -edge.y };
+        temp = { -edge.y, edge.x };
         temp /= sqrtf(temp.x * temp.x + temp.y * temp.y);
-        normalVectors.emplace_back( std::move(temp) );
+        normalVectors.emplace_back( temp );
     }
 
     // push normal vector for each edge of shape2
-    for (int i = 0; i < s2_.getPointCount() - 1; i++)
+    for (int i = 0; i < s2_->getPointCount() - 1; i++)
     {
-        edge = s2_.getPoint(i + 1) - s2_.getPoint(i);
+        edge = s2_->getPoint(i + 1) - s2_->getPoint(i);
         // normalize the normal
-        temp = { edge.x, -edge.y };
+        temp = { -edge.y, edge.x };
         temp /= sqrtf(temp.x * temp.x + temp.y * temp.y);
-        normalVectors.emplace_back( std::move(temp) );
+        normalVectors.emplace_back( temp );
     }
 
     float s1min = std::numeric_limits<float>::max();
@@ -38,18 +38,18 @@ bool CollisionHandler::isColliding(const sf::Shape &s1_, const sf::Shape &s2_) {
 
         // find min and max projection of each shape
         // shape A
-        for (int i = 0; i < s1_.getPointCount(); i++)
+        for (int i = 0; i < s1_->getPointCount(); i++)
         {
-            const float projection = dot(s1_.getPoint(i), normal);
+            const float projection = dot(s1_->getPoint(i), normal);
             s1min = std::min( s1min, projection);
             s1max = std::max( s1max, projection);
         }
 
         // find min and max projection of each shape
         // shape B
-        for (int i = 0; i < s2_.getPointCount(); i++)
+        for (int i = 0; i < s2_->getPointCount(); i++)
         {
-            const float projection = dot(s2_.getPoint(i), normal);
+            const float projection = dot(s2_->getPoint(i), normal);
             s2min = std::min( s2min, projection);
             s2max = std::max( s2max, projection);
         }
@@ -59,7 +59,7 @@ bool CollisionHandler::isColliding(const sf::Shape &s1_, const sf::Shape &s2_) {
             (s2min < s1max && s2min > s1min))
             continue;   // overlap found, re-iterate this loop
         else
-            return false;    // not overlapping. MTV vector is empty
+            return false;    // not overlapping
     }
 
     // at this point, the 2 shapes ARE colliding and true value is returned
@@ -197,5 +197,5 @@ std::optional<sf::Vector2f> CollisionHandler::isCollidingMTV(const sf::Shape &s1
 }
 
 const float CollisionHandler::dot(const sf::Vector2f &lhs, const sf::Vector2f &rhs) {
-    return lhs.x * rhs.x + lhs.y * rhs.y;
+    return (lhs.x * rhs.x) + (lhs.y * rhs.y);
 }

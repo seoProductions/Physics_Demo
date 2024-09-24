@@ -152,7 +152,8 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         const auto selector = DragHandler::getDraggedRectangle();
         for (auto& entity : Kinematics.m_entity_list)
         {
-            if (CollisionHandler::isColliding( selector, *entity.m_shape))
+            // pass in pointer to a unique shape. Enables Polymorphism
+            if (CollisionHandler::isColliding( &selector, entity.m_shape.get()))
             {
                 entity.m_shape->setFillColor(sf::Color::Blue);
             }
