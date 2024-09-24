@@ -2,9 +2,11 @@
 #ifndef PHYSICS_DEMO_COLLISIONHANDLER_HPP
 #define PHYSICS_DEMO_COLLISIONHANDLER_HPP
 #include <optional>
+#include <vector>
 #include <stack>
 #include <algorithm>
 #include <limits>
+#include <math.h>
 #include <SFML/Graphics.hpp>
 
 ///////////////////////////////////////////////////////////

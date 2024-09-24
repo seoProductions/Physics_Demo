@@ -37,6 +37,7 @@ public:
     // return change in mouse coords - only for current mouse drag
     // will reset once dragging is re-invoked
     static const sf::Vector2i&       getDeltaPos ();
+    static const sf::Vector2i&       getOriginPos();
     static const sf::Vector2i&       getDeltaTotalPos();
     static const sf::Vector2f        getDeltaPosLocal();
 

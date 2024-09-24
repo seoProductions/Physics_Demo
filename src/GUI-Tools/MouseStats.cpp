@@ -35,6 +35,10 @@ void GuiTools::MouseStats()
     ImGui::SeparatorText("Dragging Info");
     ImGui::Text("%s and %s", DragHandler::isDragging() ? "Mouse dragging":"Mouse NOT dragging",
                 DragHandler::isSelecting() ? "currently selecting": "NOT selecting");
+    ImGui::Text("started at x: %i  y: %i",
+                DragHandler::getOriginPos().x,
+                DragHandler::getOriginPos().y);
+
     ImGui::Text("Delta pos x: %i  y: %i",
                 DragHandler::getDeltaPos().x,
                 DragHandler::getDeltaPos().y);
@@ -42,6 +46,10 @@ void GuiTools::MouseStats()
     ImGui::Text("Delta pos total  x: %i  y: %i",
                 DragHandler::getDeltaTotalPos().x,
                 DragHandler::getDeltaTotalPos().y);
+
+    ImGui::Text("Rectangle size x: %f  y: %f",
+                truncf(DragHandler::getDraggedRectangle().getSize().x),
+                truncf(DragHandler::getDraggedRectangle().getSize().y));
     ImGui::End();
 }
 

@@ -74,8 +74,8 @@ void GridSpace::updateGrid() {
 
             sf::Text text;
             text.setFont(m_font);
-            text.setCharacterSize(40);
-            text.setFillColor(sf::Color(150, 220, 250, 180));
+            text.setCharacterSize(35);
+            text.setFillColor(sf::Color(219,237,227));
             text.setString(std::to_string((int)view_edge_x));
 
             text.setPosition(view_edge_x, 0.f);
@@ -124,8 +124,8 @@ void GridSpace::updateGrid() {
 
             sf::Text text;
             text.setFont(m_font);
-            text.setCharacterSize(40);
-            text.setFillColor(sf::Color(150, 220, 240, 180));
+            text.setCharacterSize(35);
+            text.setFillColor(sf::Color(219,237,227));
             text.setString(std::to_string((int)view_edge_y));
 
             text.setPosition(0.f, view_edge_y);

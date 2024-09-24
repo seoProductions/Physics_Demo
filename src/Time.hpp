@@ -52,7 +52,7 @@ public:
         delta_time  = sfml_time.asSeconds();
 
         //bounds on delta time
-        //delta_time = std::clamp(delta_time, LOW_LIMIT, HIGH_LIMIT);
+        delta_time = std::clamp(delta_time, LOW_LIMIT, HIGH_LIMIT);
 
         //update fps based on fps_delay
         if (fps_timer.getElapsedTime().asSeconds() > fps_timer_delay) {

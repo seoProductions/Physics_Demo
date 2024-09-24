@@ -119,5 +119,9 @@ void DragHandler::resetVectors() {
     m_deltaPos_total    = { 0, 0 };
 }
 
+const sf::Vector2i &DragHandler::getOriginPos() {
+    return m_orig_Pos;
+}
+
 
 

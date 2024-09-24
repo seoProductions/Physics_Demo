@@ -101,9 +101,7 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         // shape's position over-ridden by any existing [m_body]
 
         entity_.m_shape->setOutlineThickness(1.f);
-        entity_.m_shape->setOutlineColor(
-                Random::get({ sf::Color::Yellow, sf::Color::Cyan })
-        );
+        entity_.m_shape->setOutlineColor( sf::Color(235, 113, 46) );
         entity_.m_shape->setOrigin(entity_.m_shape->getLocalBounds().height / 2,
                                    entity_.m_shape->getLocalBounds().width / 2);
         entity_.m_shape->setFillColor( sf::Color( 255.f, 255.f, 255.f ));  // grey
@@ -155,7 +153,9 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
         for (auto& entity : Kinematics.m_entity_list)
         {
             if (CollisionHandler::isColliding( selector, *entity.m_shape))
-                entity.m_shape->setFillColor(sf::Color::Red); // JUST A TEST TODO
+            {
+                entity.m_shape->setFillColor(sf::Color::Blue);
+            }
         }
 
     };
