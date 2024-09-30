@@ -21,9 +21,9 @@ private:
     ////
     ///////////////////
 
-    //constants
+    //constantss
     static constexpr
-    float LOW_LIMIT  = 0.0167f; // in seconds
+    float LOW_LIMIT  = 0.00390625f; // in seconds
 
     static constexpr
     float HIGH_LIMIT = 1.f;     // in seconds

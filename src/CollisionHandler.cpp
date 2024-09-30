@@ -8,21 +8,31 @@ bool CollisionHandler::isColliding(const sf::Shape* s1_, const sf::Shape* s2_) {
     sf::Vector2f edge;
 
     // push normal vector for each edge of shape1
-    for (int i = 0; i < s1_->getPointCount() - 1; i++)
+    for (int i = 0; i < s1_->getPointCount(); i++)
     {
-        edge = s1_->getPoint(i + 1) - s1_->getPoint(i);
+        // avoid out of bounds, whilst using each edge of the shape
+        const int i_capacity = s1_->getPointCount() - 1;
+
+        edge =  s1_->getPoint((i + 1) % i_capacity) -
+                s1_->getPoint(i);
+
         // normalize the normal
-        temp = { -edge.y, edge.x };
+        temp = { edge.y, edge.x };
         temp /= sqrtf(temp.x * temp.x + temp.y * temp.y);
         normalVectors.emplace_back( temp );
     }
 
     // push normal vector for each edge of shape2
-    for (int i = 0; i < s2_->getPointCount() - 1; i++)
+    for (int i = 0; i < s2_->getPointCount(); i++)
     {
-        edge = s2_->getPoint(i + 1) - s2_->getPoint(i);
+        // avoid out of bounds, whilst using each edge of the shape
+        const int i_capacity = s2_->getPointCount() - 1;
+
+        edge =  s2_->getPoint((i + 1) % i_capacity) -
+                s2_->getPoint(i);
+
         // normalize the normal
-        temp = { -edge.y, edge.x };
+        temp = { edge.y, edge.x };
         temp /= sqrtf(temp.x * temp.x + temp.y * temp.y);
         normalVectors.emplace_back( temp );
     }
