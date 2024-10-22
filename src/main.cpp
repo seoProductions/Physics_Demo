@@ -163,6 +163,7 @@ int main()
         //RENDER SFML ENTITY ( shapes )
         for (const auto& entity: current_world->m_entity_list)
         {
+	    //  FIXME: Largley inefficient, tanks performance, I need a beter solution here
             //window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_velocity.value());
             //window.draw(std::dynamic_pointer_cast<KinematicBody>(entity.m_body)->m_arrow_acceleration.value());
             window.draw(*entity.m_shape);   // FIXME: create cast's for each body type
