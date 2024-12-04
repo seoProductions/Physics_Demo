@@ -250,6 +250,7 @@ void WorldSpace::initBehavior(std::array<WorldSpace, 4>& world) {
 
             // Default action
             entity.m_body->update();
+
         }
     };
     Forces.reset  = [&Forces]() {   if (!Forces.m_isActive) return;
